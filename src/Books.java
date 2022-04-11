@@ -1,3 +1,5 @@
+import java.util.Objects;
+
 public class Books{
     private String author;
     private String title;
@@ -35,6 +37,19 @@ public class Books{
 
     public String getDescription() {
         return description;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Books)) return false;
+        Books books = (Books) o;
+        return bookId == books.bookId && isLent == books.isLent && author.equals(books.author) && title.equals(books.title) && description.equals(books.description);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(author, title, description, bookId, isLent);
     }
 
     public void print(){

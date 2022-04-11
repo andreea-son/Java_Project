@@ -1,10 +1,13 @@
 import java.util.ArrayList;
 public class Users extends TypeOfUser{
-    private ArrayList<LentBooks> userLentBooks = new ArrayList<LentBooks>();
+    private ArrayList<LentBooks> userLentBooks = new ArrayList<>();
+    private int numOfLogins;
+
     public Users(int userId, String userName, String userPassword, String userEmail, ArrayList<LentBooks> userLentBooks){
         super(userId, userName, userPassword, userEmail);
         this.userLentBooks = userLentBooks;
     }
+
     public Users(int userId, String userName, String userPassword, String userEmail){
         super(userId, userName, userPassword, userEmail);
     }
@@ -32,12 +35,20 @@ public class Users extends TypeOfUser{
         return userLentBooks;
     }
 
-    public void setUserId(int userId) {
-        setId(userId);
+    public int getNumOfLogins() {
+        return numOfLogins;
+    }
+
+    public void setNumOfLogins(int numOfLogins) {
+        this.numOfLogins = numOfLogins;
+    }
+
+    public void setUserPassword(String userPassword){
+        setPassword(userPassword);
     }
 
     public void print(){
-        System.out.print("user id: ");
+        System.out.print("user ID: ");
         System.out.println(getId());
         System.out.print("    the name of the user: ");
         System.out.println(getName());

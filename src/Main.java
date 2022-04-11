@@ -2,6 +2,7 @@ import java.util.Scanner;
 public class Main{
     private static Scanner myObj = new Scanner(System.in);
     private static int choose;
+    private static boolean ok = false;
     public static String[] loginMenuOpt = {
         "Main menu: ",
         "1. Login as librarian",
@@ -16,15 +17,19 @@ public class Main{
         "3. Add new user",
         "4. Lend new book",
         "5. Return book",
-        "6. Print sections",
-        "7. Print books from section",
-        "8. Print partners",
-        "9. Print books added by partner",
-        "10. Print users",
-        "11. Print books lent by user",
-        "12. Print all issued books",
-        "13. Print all available books",
-        "14. Logout"
+        "6. View sections",
+        "7. View all books from section",
+        "8. View partners",
+        "9. View books added by partner",
+        "10. View users",
+        "11. View books lent by user",
+        "12. View all issued books",
+        "13. View all available books",
+        "14. Remove book",
+        "15. Remove section",
+        "16. Remove partner",
+        "17. Remove user",
+        "18. Logout"
     };
 
     public static String[] partnerMenuOpt = {
@@ -33,23 +38,37 @@ public class Main{
         "2. View the books you added",
         "3. Logout"
     };
+
+    public static String[] userMenuOpt = {
+        "User menu: ",
+        "1. View all available books",
+        "2. View the books you lent",
+        "3. Logout"
+    };
+
     public static void displayLoginMenu(String[] options){
         for (String option : options){
             System.out.println(option);
         }
-        System.out.print("Choose your option an option between 1 and 4: ");
+        System.out.print("Choose an option between 1 and 4: ");
     }
     public static void displayPartnerMenu(String[] options){
         for (String option : options){
             System.out.println(option);
         }
-        System.out.print("Choose your option an option between 1 and 3: ");
+        System.out.print("Choose an option between 1 and 3: ");
     }
     public static void displayLibrarianMenu(String[] options){
         for (String option : options){
             System.out.println(option);
         }
-        System.out.print("Choose your option an option between 1 and 14: ");
+        System.out.print("Choose an option between 1 and 18: ");
+    }
+    public static void displayUserMenu(String[] options){
+        for (String option : options){
+            System.out.println(option);
+        }
+        System.out.print("Choose an option between 1 and 3: ");
     }
     public static void clearConsole(){
         System.out.print("\033[H\033[2J");
@@ -65,9 +84,9 @@ public class Main{
                 case 1:
                 {
                     clearConsole();
-                    LibrarianMenu librarianMenu = new LibrarianMenu();
+                    LibrarianService librarianService = new LibrarianService();
                     try {
-                        librarianMenu.loginInformation();
+                        librarianService.loginInformation();
                     } catch (UsernameNotFoundException ex) {
                         System.err.print(ex);
                         System.exit(1);
@@ -79,13 +98,13 @@ public class Main{
                     displayLibrarianMenu(librarianMenuOpt);
                     choose = myObj.nextInt();
                     myObj.nextLine();
-                    while (choose != 14){
+                    while (choose != 18){
                         switch (choose) {
                             case 1:
                             {
                                 clearConsole();
                                 try {
-                                    librarianMenu.addNewSection();
+                                    librarianService.addNewSection();
                                 } catch (AlreadyUsedNameException ex) {
                                     System.err.print(ex);
                                     System.exit(1);
@@ -96,7 +115,7 @@ public class Main{
                             {
                                 clearConsole();
                                 try {
-                                    librarianMenu.addNewPartner();
+                                    librarianService.addNewPartner();
                                 } catch (AlreadyUsedNameException ex) {
                                     System.err.print(ex);
                                     System.exit(1);
@@ -116,7 +135,7 @@ public class Main{
                             {
                                 clearConsole();
                                 try {
-                                    librarianMenu.addNewUser();
+                                    librarianService.addNewUser();
                                 } catch (BookNotFoundException ex) {
                                     System.err.print(ex);
                                     System.exit(1);
@@ -142,7 +161,7 @@ public class Main{
                             {
                                 clearConsole();
                                 try {
-                                    librarianMenu.lendNewBook();
+                                    librarianService.lendNewBook();
                                 } catch (BookNotFoundException ex) {
                                     System.err.print(ex);
                                     System.exit(1);
@@ -168,7 +187,7 @@ public class Main{
                             {
                                 clearConsole();
                                 try {
-                                    librarianMenu.returnBook();
+                                    librarianService.returnBook();
                                 } catch (UserNotFoundException ex) {
                                     System.err.print(ex);
                                     System.exit(1);
@@ -193,14 +212,14 @@ public class Main{
                             case 6:
                             {
                                 clearConsole();
-                                librarianMenu.printSections();
+                                librarianService.printSections();
                                 break;
                             }
                             case 7:
                             {
                                 clearConsole();
                                 try {
-                                    librarianMenu.printSectionBooks();
+                                    librarianService.printSectionBooks();
                                 } catch (SectionNotFoundException ex) {
                                     System.err.print(ex);
                                     System.exit(1);
@@ -210,14 +229,14 @@ public class Main{
                             case 8:
                             {
                                 clearConsole();
-                                librarianMenu.printPartners();
+                                librarianService.printPartners();
                                 break;
                             }
                             case 9:
                             {
                                 clearConsole();
                                 try {
-                                    librarianMenu.printPartnerBooks();
+                                    librarianService.printPartnerBooks();
                                 } catch (PartnerNotFoundException ex) {
                                     System.err.print(ex);
                                     System.exit(1);
@@ -227,14 +246,14 @@ public class Main{
                             case 10:
                             {
                                 clearConsole();
-                                librarianMenu.printUsers();
+                                librarianService.printUsers();
                                 break;
                             }
                             case 11:
                             {
                                 clearConsole();
                                 try {
-                                    librarianMenu.printUserLentBooks();
+                                    librarianService.printUserLentBooks();
                                 } catch (UserNotFoundException ex) {
                                     System.err.print(ex);
                                     System.exit(1);
@@ -244,69 +263,143 @@ public class Main{
                             case 12:
                             {
                                 clearConsole();
-                                librarianMenu.printIssuedBooks();
+                                librarianService.printIssuedBooks();
                                 break;
                             }
                             case 13:
                             {
                                 clearConsole();
-                                librarianMenu.printBooks();
+                                librarianService.printBooks();
+                                break;
+                            }
+                            case 14:
+                            {
+                                clearConsole();
+                                try {
+                                    librarianService.deleteBook();
+                                } catch (BookNotFoundException ex) {
+                                    System.err.print(ex);
+                                    System.exit(1);
+                                } catch (BookCurrentlyLentException ex1) {
+                                    System.err.print(ex1);
+                                    System.exit(1);
+                                }
+                                break;
+                            }
+                            case 15:
+                            {
+                                clearConsole();
+                                try {
+                                    librarianService.deleteSections();
+                                } catch (SectionNotFoundException ex) {
+                                    System.err.print(ex);
+                                    System.exit(1);
+                                } catch (BookCurrentlyLentException ex1) {
+                                    System.err.print(ex1);
+                                    System.exit(1);
+                                }
+                                break;
+                            }
+                            case 16:
+                            {
+                                clearConsole();
+                                try {
+                                    librarianService.deletePartners();
+                                } catch (PartnerNotFoundException ex) {
+                                    System.err.print(ex);
+                                    System.exit(1);
+                                } catch (BookCurrentlyLentException ex1) {
+                                    System.err.print(ex1);
+                                    System.exit(1);
+                                }
+                                break;
+                            }
+                            case 17:
+                            {
+                                clearConsole();
+                                try {
+                                    librarianService.deleteUsers();
+                                } catch (UserNotFoundException ex) {
+                                    System.err.print(ex);
+                                    System.exit(1);
+                                } catch (BookCurrentlyLentException ex1) {
+                                    System.err.print(ex1);
+                                    System.exit(1);
+                                }
                                 break;
                             }
                             default:
                             {
                                 clearConsole();
                                 System.out.println("Incorrect selection. Try again!");
+                                ok = true;
                                 break;
                             }
                         }
-                        System.out.println("If you want to return to the previous menu type 0");
-                        choose = myObj.nextInt();
-                        myObj.nextLine();
-                        if (choose == 0) {
-                            clearConsole();
+                        if(!ok) {
+                            System.out.println("If you want to return to the previous menu type 0");
+                            choose = myObj.nextInt();
+                            myObj.nextLine();
+                            if (choose == 0) {
+                                clearConsole();
+                                displayLibrarianMenu(librarianMenuOpt);
+                                choose = myObj.nextInt();
+                                myObj.nextLine();
+                            }
+                        }
+                        else {
                             displayLibrarianMenu(librarianMenuOpt);
                             choose = myObj.nextInt();
                             myObj.nextLine();
+                            ok = false;
                         }
                     }
                     break;
                 }
                 case 2: {
                     clearConsole();
-                    PartnerMenu partnerMenu = new PartnerMenu();
-                    try {
-                        partnerMenu.loginInformation();
-                    } catch (EmailNotFoundException ex) {
-                        System.err.print(ex);
-                        System.exit(1);
-                    } catch (IncorrectPasswordException ex1) {
-                        System.err.print(ex1);
-                        System.exit(1);
-                    } catch (IncorrectPassFormatException ex2) {
-                        System.err.print(ex2);
-                        System.exit(1);
+                    PartnerService partnerService = new PartnerService();
+                    if(LibrarianService.getPartners().size() == 0) {
+                        System.out.println("There are no partners! ");
+                        System.out.println("If you want to return to the previous menu type 0");
+                        choose = myObj.nextInt();
+                        myObj.nextLine();
+                        if(choose == 0) {
+                            choose = 3;
+                            clearConsole();
+                        }
                     }
-                    clearConsole();
-                    displayPartnerMenu(partnerMenuOpt);
-                    choose = myObj.nextInt();
-                    myObj.nextLine();
-                    clearConsole();
+                    else {
+                        try {
+                            partnerService.loginInformation();
+                        } catch (EmailNotFoundException ex) {
+                            System.err.print(ex);
+                            System.exit(1);
+                        } catch (IncorrectPasswordException ex1) {
+                            System.err.print(ex1);
+                            System.exit(1);
+                        } catch (IncorrectPassFormatException ex2) {
+                            System.err.print(ex2);
+                            System.exit(1);
+                        }
+                        clearConsole();
+                        displayPartnerMenu(partnerMenuOpt);
+                        choose = myObj.nextInt();
+                        myObj.nextLine();
+                        clearConsole();
+                    }
                     while (choose != 3) {
                         switch (choose) {
                             case 1:
                             {
                                 clearConsole();
                                 try {
-                                    partnerMenu.addNewBook();
+                                    partnerService.addNewBook();
                                 } catch (SectionNotFoundException ex) {
                                     System.err.print(ex);
                                     System.exit(1);
-                                } catch (WrongInputException ex1) {
+                                } catch (BookAlreadyAddedException ex1) {
                                     System.err.print(ex1);
-                                    System.exit(1);
-                                } catch (BookAlreadyAddedException ex2) {
-                                    System.err.print(ex2);
                                     System.exit(1);
                                 }
                                 break;
@@ -314,29 +407,110 @@ public class Main{
                             case 2:
                             {
                                 clearConsole();
-                                partnerMenu.printPartnerBooks();
+                                partnerService.printPartnerBooks();
                                 break;
                             }
                             default:
                             {
+                                clearConsole();
                                 System.out.println("Incorrect selection. Try again!");
+                                ok = true;
                                 break;
                             }
                         }
-                        System.out.println("If you want to return to the previous menu type 0");
-                        choose = myObj.nextInt();
-                        myObj.nextLine();
-                        if(choose == 0) {
-                            clearConsole();
+                        if(!ok) {
+                            System.out.println("If you want to return to the previous menu type 0");
+                            choose = myObj.nextInt();
+                            myObj.nextLine();
+                            if (choose == 0) {
+                                clearConsole();
+                                displayPartnerMenu(partnerMenuOpt);
+                                choose = myObj.nextInt();
+                                myObj.nextLine();
+                            }
+                        }
+                        else {
                             displayPartnerMenu(partnerMenuOpt);
                             choose = myObj.nextInt();
                             myObj.nextLine();
+                            ok = false;
                         }
                     }
                     break;
                 }
                 case 3:
                 {
+                    clearConsole();
+                    UserService userService = new UserService();
+                    if(LibrarianService.getUsers().size() == 0) {
+                        System.out.println("There are no users! ");
+                        System.out.println("If you want to return to the previous menu type 0");
+                        choose = myObj.nextInt();
+                        myObj.nextLine();
+                        if(choose == 0) {
+                            choose = 3;
+                            clearConsole();
+                        }
+                    }
+                    else {
+                        try {
+                            userService.loginInformation();
+                        } catch (EmailNotFoundException ex) {
+                            System.err.print(ex);
+                            System.exit(1);
+                        } catch (IncorrectPasswordException ex1) {
+                            System.err.print(ex1);
+                            System.exit(1);
+                        } catch (IncorrectPassFormatException ex2) {
+                            System.err.print(ex2);
+                            System.exit(1);
+                        }
+                        clearConsole();
+                        displayUserMenu(userMenuOpt);
+                        choose = myObj.nextInt();
+                        myObj.nextLine();
+                        clearConsole();
+                    }
+                    while (choose != 3) {
+                        switch (choose) {
+                            case 1:
+                            {
+                                clearConsole();
+                                userService.printAvailableBooks();
+                                break;
+                            }
+                            case 2:
+                            {
+                                clearConsole();
+                                userService.printLentBooks();
+                                break;
+                            }
+                            default:
+                            {
+                                clearConsole();
+                                System.out.println("Incorrect selection. Try again!");
+                                ok = true;
+                                break;
+                            }
+                        }
+                        if(!ok) {
+                            System.out.println("If you want to return to the previous menu type 0");
+                            choose = myObj.nextInt();
+                            myObj.nextLine();
+                            if (choose == 0) {
+                                clearConsole();
+                                displayUserMenu(userMenuOpt);
+                                choose = myObj.nextInt();
+                                myObj.nextLine();
+                            }
+                        }
+                        else {
+                            displayUserMenu(userMenuOpt);
+                            choose = myObj.nextInt();
+                            myObj.nextLine();
+                            ok = false;
+                        }
+                    }
                     break;
                 }
                 case 4:
@@ -348,14 +522,18 @@ public class Main{
                 default:
                 {
                     clearConsole();
-                    System.out.println("Incorrect selection. Try again!!");
+                    System.out.println("Incorrect selection. Try again!");
+                    ok = true;
                     break;
                 }
             }
-            clearConsole();
+            if(!ok) {
+                clearConsole();
+            }
             displayLoginMenu(loginMenuOpt);
             choose = myObj.nextInt();
             myObj.nextLine();
+            ok = false;
         }
     }
 }

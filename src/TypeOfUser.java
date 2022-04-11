@@ -40,6 +40,4 @@ abstract class TypeOfUser {
     }
 
     public abstract void print();
-
-
 }

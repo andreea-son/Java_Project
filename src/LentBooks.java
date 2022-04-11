@@ -7,14 +7,15 @@ public class LentBooks extends Books{
     private long exceededPrice;
     private String returnDate;
     private long exceededDays;
+    private boolean isDeleted;
 
-    public LentBooks(int bookId, String author, String title, String description, String issuedDate, long daysFromIssue, boolean isLent){
+    public LentBooks(int bookId, boolean isDeleted, String author, String title, String description, String issuedDate, long daysFromIssue, boolean isLent){
         super(bookId, author, title, description, isLent);
         this.daysFromIssue = daysFromIssue;
         this.price = 2 * daysFromIssue;
         this.issuedDate = issuedDate;
 
-        String date[] = this.issuedDate.split("-0|-");
+        String[] date = this.issuedDate.split("-0|-");
         int year = Integer.parseInt(date[0]);
         int month = Integer.parseInt(date[1]);
         int day = Integer.parseInt(date[2]);
@@ -25,6 +26,8 @@ public class LentBooks extends Books{
         this.exceededPrice = 0;
 
         this.returnDate = aux1.toString();
+
+        this.isDeleted = isDeleted;
     }
 
     public LentBooks(){
@@ -62,8 +65,8 @@ public class LentBooks extends Books{
         this.exceededDays = exceededDays;
     }
 
-    public void setReturnDate(String returnDate) {
-        this.returnDate = returnDate;
+    public void setIsDeleted(boolean deleted) {
+        isDeleted = deleted;
     }
 
     public void print(){
@@ -76,6 +79,8 @@ public class LentBooks extends Books{
         }
         else
             System.out.println("    price: " + price + " ron");
+        if(isDeleted)
+            System.out.println("    (the book was deleted)");
     }
 
 }

@@ -1,0 +1,6 @@
+bookId,author,title,description,isLent
+8,Harper Lee,To Kill a Mockingbird,classic novel,TRUE
+7,Mary Shelley,Frankenstein,horror,FALSE
+10,Stephen King,The Shining,horror,TRUE
+9,J. K. Rowling,Harry Potter and the Philosopher's Stone,fantasy,TRUE
+11,Leigh Bardugo,Six of Crows,fantasy,FALSE

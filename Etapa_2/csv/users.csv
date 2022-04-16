@@ -1,0 +1,6 @@
+userId,numOfLogins,userName,userPassword,userEmail,userLentBooks
+1,0,Belle Garcia,BelleGarcia1,BelleGarcia1@yahoo.com,null
+3,1,Denise Cole,Denise03#,denise_cole3@gmail.com,../csv/user_3_books.csv
+5,3,Dennis Fox,Dennis05#,dennisFox5@yahoo.com,../csv/user_5_books.csv
+4,2,Ryan Ford,FordRyan04#,ryan.ford4@yahoo.com,../csv/user_4_books.csv
+2,1,Daniel Roberts,Roberts02#,danielRoberts2@gmail.com,null

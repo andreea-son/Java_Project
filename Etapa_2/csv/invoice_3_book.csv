@@ -1,0 +1,2 @@
+bookId,isDeleted,author,title,description,issuedDate,daysFromIssue,isLent
+10,FALSE,Stephen King,The Shining ,horror,2022-04-07,22,TRUE

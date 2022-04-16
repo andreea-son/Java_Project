@@ -1,0 +1,2 @@
+bookId,isDeleted,author,title,description,issuedDate,daysFromIssue,isLent
+2,FALSE,F. Scott Fitzgerald,The Great Gatsby,classic novel,2022-03-04,20,TRUE

@@ -1,0 +1,5 @@
+bookId,author,title,description,isLent
+5,George Orwell,1984,dystopian novel,TRUE
+4,George Orwell,Animal Farm,allegory,FALSE
+3,Ray Bradbury,Fahrenheit 451,dystopian novel,FALSE
+6,Jane Austen, Pride and Prejudice ,classic novel,TRUE

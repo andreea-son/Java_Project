@@ -1,0 +1,5 @@
+partnerId,numOfLogins,partnerName,partnerPassword,partnerEmail,partnerBooks
+2,2,Jonathan Graham,Graham02#,john_graham@gmail.com,../csv/partner_2_books.csv
+4,1,Susan Harris,Susan04#,SusanHarrys@gmail.com,../csv/partner_4_books.csv
+1,0,Lily White,lily.white1,lily.white1@yahoo.com,null
+3,1,Violet Riley,Violet03#,violetRiley33@yahoo.com,../csv/partner_3_books.csv

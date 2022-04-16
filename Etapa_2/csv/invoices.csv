@@ -1,0 +1,7 @@
+invoiceId,invoiceDate,book,userThatLent,cardOrCash
+1,2022-05-04,../csv/invoice_1_book.csv,../csv/invoice_1_6_3_user.csv,card
+5,2022-05-20,../csv/invoice_6_book.csv,../csv/invoice_1_6_3_user.csv,cash
+2,2022-05-07,../csv/invoice_3_book.csv,../csv/invoice_1_6_3_user.csv,card
+4,2022-05-14,../csv/invoice_5_book.csv,../csv/invoice_5_2_user.csv,card
+3,2022-05-12,../csv/invoice_2_book.csv,../csv/invoice_5_2_user.csv,cash
+6,2022-05-23,../csv/invoice_4_book.csv,../csv/invoice_4_user.csv,card

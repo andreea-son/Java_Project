@@ -1,0 +1,2 @@
+bookId,isDeleted,author,title,description,issuedDate,daysFromIssue,isLent
+9,FALSE,J. K. Rowling,Harry Potter and the Philosopher's Stone,fantasy,2022-03-12,14,TRUE

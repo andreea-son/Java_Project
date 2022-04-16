@@ -1,0 +1,8 @@
+sectionId,sectionName,sectionBooks
+3,science fiction,../csv/section_3_books.csv
+1,classics,../csv/section_1_books.csv
+4,dystopian,../csv/section_4_books.csv
+2,allegories,../csv/section_2_books.csv
+6,horror,../csv/section_6_books.csv
+5,fantasy,../csv/section_5_books.csv
+7,comedy,null

@@ -1,0 +1,2 @@
+bookId,isDeleted,author,title,description,issuedDate,daysFromIssue,isLent
+8,FALSE,Harper Lee,To Kill a Mockingbird,classic novel,2022-04-23,11,TRUE

@@ -1,0 +1,3 @@
+bookId,author,title,description,isLent
+1,Frank Herbert,Dune,science fiction,FALSE
+2,F. Scott Fitzgerald,The Great Gatsby,classic novel,TRUE

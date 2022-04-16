@@ -1,0 +1,3 @@
+bookId,author,title,description,isLent
+7,Mary Shelly,Frankenstein,horror,FALSE
+10,Stephen King,The Shining ,horror,TRUE

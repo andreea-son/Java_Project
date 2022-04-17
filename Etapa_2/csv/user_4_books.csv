@@ -1,3 +1,0 @@
-bookId,isDeleted,author,title,description,issuedDate,daysFromIssue,isLent
-5,FALSE,George Orwell,1984,dystopian novel,2022-05-14,12,TRUE
-9,FALSE,J. K. Rowling,Harry Potter and the Philosopher's Stone,fantasy,2022-05-12,14,TRUE

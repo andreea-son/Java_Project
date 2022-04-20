@@ -3,14 +3,14 @@ public class Main{
     private static Scanner myObj = new Scanner(System.in);
     private static int choose;
     private static boolean ok = false;
-    public static String[] loginMenuOpt = {
+    private static String[] loginMenuOpt = {
         "Main menu: ",
         "1. Login as librarian",
         "2. Login as partner",
         "3. Login as user",
         "4. Exit"
     };
-    public static String[] librarianMenuOpt = {
+    private static String[] librarianMenuOpt = {
         "Librarian menu: ",
         "1. Add new section",
         "2. Add new partner",
@@ -34,14 +34,14 @@ public class Main{
         "20. Logout"
     };
 
-    public static String[] partnerMenuOpt = {
+    private static String[] partnerMenuOpt = {
         "Partner menu: ",
         "1. Add new book",
         "2. View the books you added",
         "3. Logout"
     };
 
-    public static String[] userMenuOpt = {
+    private static String[] userMenuOpt = {
         "User menu: ",
         "1. View all available books",
         "2. View the books you are currently lending",
@@ -81,22 +81,25 @@ public class Main{
     public static void main(String[] args) {
         clearConsole();
 
+        LibrarianService.initialize();
+
         CSVPartnerService csvPartnerService = CSVPartnerService.getInstance();
         csvPartnerService.readPartners();
-        csvPartnerService.readPartnerBooks();
 
         CSVSectionService csvSectionService = CSVSectionService.getInstance();
         csvSectionService.readSections();
-        csvSectionService.readSectionBooks();
 
         CSVUserService csvUserService = CSVUserService.getInstance();
         csvUserService.readUsers();
-        csvUserService.readUserBooks();
+
+        CSVBookService csvBookService = CSVBookService.getInstance();
+        csvBookService.readBooks();
+
+        CSVLentBookService csvLentBookService = CSVLentBookService.getInstance();
+        csvLentBookService.readLentBooks();
 
         CSVInvoiceService csvInvoiceService = CSVInvoiceService.getInstance();
         csvInvoiceService.readInvoices();
-        csvInvoiceService.readInvoiceBook();
-        csvInvoiceService.readInvoiceUser();
 
         CSVAuditService csvAuditService = new CSVAuditService();
 
@@ -107,8 +110,8 @@ public class Main{
             switch (choose) {
                 case 1:
                 {
-                    clearConsole();
                     LibrarianService librarianService = new LibrarianService();
+                    clearConsole();
                     try {
                         librarianService.loginInformation();
                     } catch (UsernameNotFoundException ex) {
@@ -145,17 +148,13 @@ public class Main{
                                 clearConsole();
                                 try {
                                     librarianService.addNewPartner();
-                                } catch (AlreadyUsedNameException ex) {
+                                } catch (AlreadyUsedEmailException ex) {
                                     csvAuditService.closeFile();
                                     System.err.print(ex);
                                     System.exit(1);
-                                } catch (AlreadyUsedEmailException ex1) {
+                                } catch (IncorrectMailFormatException ex1) {
                                     csvAuditService.closeFile();
                                     System.err.print(ex1);
-                                    System.exit(1);
-                                } catch (IncorrectMailFormatException ex2) {
-                                    csvAuditService.closeFile();
-                                    System.err.print(ex2);
                                     System.exit(1);
                                 }
                                 csvAuditService.updateCSV();
@@ -166,17 +165,13 @@ public class Main{
                                 clearConsole();
                                 try {
                                     librarianService.addNewUser();
-                                } catch (AlreadyUsedNameException ex) {
+                                } catch (AlreadyUsedEmailException ex) {
                                     csvAuditService.closeFile();
                                     System.err.print(ex);
                                     System.exit(1);
-                                } catch (AlreadyUsedEmailException ex1) {
+                                } catch (IncorrectMailFormatException ex1) {
                                     csvAuditService.closeFile();
                                     System.err.print(ex1);
-                                    System.exit(1);
-                                } catch (IncorrectMailFormatException ex2) {
-                                    csvAuditService.closeFile();
-                                    System.err.print(ex2);
                                     System.exit(1);
                                 }
                                 csvAuditService.updateCSV();
@@ -185,79 +180,142 @@ public class Main{
                             case 4:
                             {
                                 clearConsole();
-                                try {
-                                    librarianService.lendNewBook();
-                                } catch (BookNotFoundException ex) {
-                                    csvAuditService.closeFile();
-                                    System.err.print(ex);
-                                    System.exit(1);
-                                } catch (BookAlreadyLentException ex1) {
-                                    csvAuditService.closeFile();
-                                    System.err.print(ex1);
-                                    System.exit(1);
-                                } catch (UserNotFoundException ex2) {
-                                    csvAuditService.closeFile();
-                                    System.err.print(ex2);
-                                    System.exit(1);
-                                } catch (IncorrectDateFormatException ex3) {
-                                    csvAuditService.closeFile();
-                                    System.err.print(ex3);
-                                    System.exit(1);
-                                } catch (MaxNumOfDaysException ex4) {
-                                    csvAuditService.closeFile();
-                                    System.err.print(ex4);
-                                    System.exit(1);
-                                } catch (WrongInputException ex5) {
-                                    csvAuditService.closeFile();
-                                    System.err.print(ex5);
-                                    System.exit(1);
-                                } catch (InvalidCodeException ex6) {
-                                    csvAuditService.closeFile();
-                                    System.err.print(ex6);
-                                    System.exit(1);
-                                } catch (DateNotValidException ex7) {
-                                    csvAuditService.closeFile();
-                                    System.err.print(ex7);
-                                    System.exit(1);
+                                int ok1 = 0;
+                                int ok2 = 0;
+
+                                for (int i = 0; i < librarianService.getPartners().size(); i++)
+                                    for (int j = 0; j < librarianService.getPartnerBooks().get(i).size(); j++)
+                                        if (librarianService.getPartnerBooks().get(i).size() > 0)
+                                            if (!librarianService.getPartnerBooks().get(i).get(j).getIsDeleted()){
+                                                ok2 = 1;
+                                                break;
+                                            }
+
+                                if(librarianService.getUsers().size() == 0) {
+                                    System.out.println("There are no users! \n");
+                                    choose = 20;
                                 }
-                                csvAuditService.updateCSV();
+                                else{
+                                    for (Users user : librarianService.getUsers())
+                                        if (!user.getIsDeleted()) {
+                                            ok1 = 1;
+                                            break;
+                                        }
+                                    if (ok1 == 0) {
+                                        System.out.println("There are no users! \n");
+                                        choose = 20;
+                                    }
+                                    else if (ok2 == 0) {
+                                        System.out.println("There are no books! \n");
+                                        choose = 20;
+                                    }
+                                    else {
+                                        try {
+                                            librarianService.lendNewBook();
+                                        } catch (BookNotFoundException ex) {
+                                            csvAuditService.closeFile();
+                                            System.err.print(ex);
+                                            System.exit(1);
+                                        } catch (BookAlreadyLentException ex1) {
+                                            csvAuditService.closeFile();
+                                            System.err.print(ex1);
+                                            System.exit(1);
+                                        } catch (UserNotFoundException ex2) {
+                                            csvAuditService.closeFile();
+                                            System.err.print(ex2);
+                                            System.exit(1);
+                                        } catch (IncorrectDateFormatException ex3) {
+                                            csvAuditService.closeFile();
+                                            System.err.print(ex3);
+                                            System.exit(1);
+                                        } catch (MaxNumOfDaysException ex4) {
+                                            csvAuditService.closeFile();
+                                            System.err.print(ex4);
+                                            System.exit(1);
+                                        } catch (WrongInputException ex5) {
+                                            csvAuditService.closeFile();
+                                            System.err.print(ex5);
+                                            System.exit(1);
+                                        } catch (InvalidCodeException ex6) {
+                                            csvAuditService.closeFile();
+                                            System.err.print(ex6);
+                                            System.exit(1);
+                                        } catch (DateNotValidException ex7) {
+                                            csvAuditService.closeFile();
+                                            System.err.print(ex7);
+                                            System.exit(1);
+                                        }
+                                        csvAuditService.updateCSV();
+                                    }
+                                }
                                 break;
                             }
                             case 5:
                             {
                                 clearConsole();
-                                try {
-                                    librarianService.returnBook();
-                                } catch (UserNotFoundException ex) {
-                                    csvAuditService.closeFile();
-                                    System.err.print(ex);
-                                    System.exit(1);
-                                } catch (BookNotFoundException ex1) {
-                                    csvAuditService.closeFile();
-                                    System.err.print(ex1);
-                                    System.exit(1);
-                                } catch (IncorrectDateFormatException ex2) {
-                                    csvAuditService.closeFile();
-                                    System.err.print(ex2);
-                                    System.exit(1);
-                                } catch (BookNotLentException ex3) {
-                                    csvAuditService.closeFile();
-                                    System.err.print(ex3);
-                                    System.exit(1);
-                                } catch (NoLentBooksException ex4) {
-                                    csvAuditService.closeFile();
-                                    System.err.print(ex4);
-                                    System.exit(1);
-                                } catch (WrongInputException ex5) {
-                                    csvAuditService.closeFile();
-                                    System.err.print(ex5);
-                                    System.exit(1);
-                                } catch (DateNotValidException ex6) {
-                                    csvAuditService.closeFile();
-                                    System.err.print(ex6);
-                                    System.exit(1);
+
+                                int ok1 = 0;
+                                int ok2 = 0;
+
+                                for (int i = 0; i < librarianService.getUsers().size(); i++)
+                                    for (int j = 0; j < librarianService.getUserLentBooks().get(i).size(); j++)
+                                        if (librarianService.getUserLentBooks().get(i).get(j).getIsLent() && !librarianService.getUserLentBooks().get(i).get(j).getIsDeleted()) {
+                                            ok2 = 1;
+                                            break;
+                                        }
+                                if(librarianService.getUsers().size() == 0) {
+                                    System.out.println("There are no users! \n");
+                                    choose = 20;
                                 }
-                                csvAuditService.updateCSV();
+                                else {
+                                    for (Users user : librarianService.getUsers())
+                                        if (!user.getIsDeleted()) {
+                                            ok1 = 1;
+                                            break;
+                                        }
+                                    if (ok1 == 0) {
+                                        System.out.println("There are no users! \n");
+                                        choose = 20;
+                                    }
+                                    else if (ok2 == 0) {
+                                        System.out.println("There are no lent books! \n");
+                                        choose = 20;
+                                    }
+                                    else {
+                                        try {
+                                            librarianService.returnBook();
+                                        } catch (UserNotFoundException ex) {
+                                            csvAuditService.closeFile();
+                                            System.err.print(ex);
+                                            System.exit(1);
+                                        } catch (BookNotFoundException ex1) {
+                                            csvAuditService.closeFile();
+                                            System.err.print(ex1);
+                                            System.exit(1);
+                                        } catch (IncorrectDateFormatException ex2) {
+                                            csvAuditService.closeFile();
+                                            System.err.print(ex2);
+                                            System.exit(1);
+                                        } catch (BookNotLentException ex3) {
+                                            csvAuditService.closeFile();
+                                            System.err.print(ex3);
+                                            System.exit(1);
+                                        } catch (NoLentBooksException ex4) {
+                                            csvAuditService.closeFile();
+                                            System.err.print(ex4);
+                                            System.exit(1);
+                                        } catch (WrongInputException ex5) {
+                                            csvAuditService.closeFile();
+                                            System.err.print(ex5);
+                                            System.exit(1);
+                                        } catch (DateNotValidException ex6) {
+                                            csvAuditService.closeFile();
+                                            System.err.print(ex6);
+                                            System.exit(1);
+                                        }
+                                        csvAuditService.updateCSV();
+                                    }
+                                }
                                 break;
                             }
                             case 6:
@@ -363,69 +421,150 @@ public class Main{
                             case 16:
                             {
                                 clearConsole();
-                                try {
-                                    librarianService.deleteBook();
-                                } catch (BookNotFoundException ex) {
-                                    csvAuditService.closeFile();
-                                    System.err.print(ex);
-                                    System.exit(1);
-                                } catch (BookCurrentlyLentException ex1) {
-                                    csvAuditService.closeFile();
-                                    System.err.print(ex1);
-                                    System.exit(1);
+
+                                int ok1 = 0;
+                                int ok2 = 0;
+
+                                for (int i = 0; i < librarianService.getPartners().size(); i++)
+                                    if (librarianService.getPartnerBooks().get(i).size() > 0) {
+                                        ok1 = 1;
+                                        break;
+                                    }
+                                if (ok1 == 0) {
+                                    System.out.println("There are no books! \n");
+                                    choose = 20;
                                 }
-                                csvAuditService.updateCSV();
+                                else {
+                                    for (int i = 0; i < librarianService.getPartners().size(); i++)
+                                        for (int j = 0; j < librarianService.getPartnerBooks().get(i).size(); j++)
+                                            if (!librarianService.getPartnerBooks().get(i).get(j).getIsLent() && !librarianService.getPartnerBooks().get(i).get(j).getIsDeleted()) {
+                                                ok2 = 1;
+                                                break;
+                                            }
+                                    if (ok2 == 0) {
+                                        System.out.println("There are no books! \n");
+                                        choose = 20;
+                                    }
+                                    else {
+                                        try {
+                                            librarianService.deleteBook();
+                                        } catch (BookNotFoundException ex) {
+                                            csvAuditService.closeFile();
+                                            System.err.print(ex);
+                                            System.exit(1);
+                                        } catch (BookCurrentlyLentException ex1) {
+                                            csvAuditService.closeFile();
+                                            System.err.print(ex1);
+                                            System.exit(1);
+                                        }
+                                        csvAuditService.updateCSV();
+                                    }
+                                }
                                 break;
                             }
                             case 17:
                             {
                                 clearConsole();
-                                try {
-                                    librarianService.deleteSections();
-                                } catch (SectionNotFoundException ex) {
-                                    csvAuditService.closeFile();
-                                    System.err.print(ex);
-                                    System.exit(1);
-                                } catch (BookCurrentlyLentException ex1) {
-                                    csvAuditService.closeFile();
-                                    System.err.print(ex1);
-                                    System.exit(1);
+
+                                int ok1 = 0;
+
+                                if(librarianService.getSections().size() < 1) {
+                                    System.out.println("There are no sections! \n");
+                                    choose = 20;
                                 }
-                                csvAuditService.updateCSV();
+                                else {
+                                    for (Sections section : librarianService.getSections())
+                                        if (!section.getIsDeleted()) {
+                                            ok1 = 1;
+                                            break;
+                                        }
+                                    if (ok1 == 0) {
+                                        System.out.println("There are no sections! \n");
+                                        choose = 20;
+                                    }
+                                    else {
+                                        try {
+                                            librarianService.deleteSections();
+                                        } catch (SectionNotFoundException ex) {
+                                            csvAuditService.closeFile();
+                                            System.err.print(ex);
+                                            System.exit(1);
+                                        } catch (BookCurrentlyLentException ex1) {
+                                            csvAuditService.closeFile();
+                                            System.err.print(ex1);
+                                            System.exit(1);
+                                        }
+                                        csvAuditService.updateCSV();
+                                    }
+                                }
                                 break;
                             }
                             case 18:
                             {
                                 clearConsole();
-                                try {
-                                    librarianService.deletePartners();
-                                } catch (PartnerNotFoundException ex) {
-                                    csvAuditService.closeFile();
-                                    System.err.print(ex);
-                                    System.exit(1);
-                                } catch (BookCurrentlyLentException ex1) {
-                                    csvAuditService.closeFile();
-                                    System.err.print(ex1);
-                                    System.exit(1);
+
+                                int ok1 = 0;
+
+                                if(librarianService.getPartners().size() < 1){
+                                    System.out.println("There are no partners! \n");
                                 }
-                                csvAuditService.updateCSV();
+                                else {
+                                    for (Partners partner : librarianService.getPartners())
+                                        if (!partner.getIsDeleted()) {
+                                            ok1 = 1;
+                                            break;
+                                        }
+                                    if (ok1 == 0)
+                                        System.out.println("There are no partners! \n");
+                                    else {
+                                        try {
+                                            librarianService.deletePartners();
+                                        } catch (PartnerNotFoundException ex) {
+                                            csvAuditService.closeFile();
+                                            System.err.print(ex);
+                                            System.exit(1);
+                                        } catch (BookCurrentlyLentException ex1) {
+                                            csvAuditService.closeFile();
+                                            System.err.print(ex1);
+                                            System.exit(1);
+                                        }
+                                        csvAuditService.updateCSV();
+                                    }
+                                }
                                 break;
                             }
                             case 19:
                             {
                                 clearConsole();
-                                try {
-                                    librarianService.deleteUsers();
-                                } catch (UserNotFoundException ex) {
-                                    csvAuditService.closeFile();
-                                    System.err.print(ex);
-                                    System.exit(1);
-                                } catch (BookCurrentlyLentException ex1) {
-                                    csvAuditService.closeFile();
-                                    System.err.print(ex1);
-                                    System.exit(1);
+
+                                int ok1 = 0;
+
+                                if(librarianService.getUsers().size() < 1){
+                                    System.out.println("There are no users! \n");
                                 }
-                                csvAuditService.updateCSV();
+                                else {
+                                    for (Users user : librarianService.getUsers())
+                                        if (!user.getIsDeleted()) {
+                                            ok1 = 1;
+                                            break;
+                                        }
+                                    if (ok1 == 0)
+                                        System.out.println("There are no users! \n");
+                                    else {
+                                        try {
+                                            librarianService.deleteUsers();
+                                        } catch (UserNotFoundException ex) {
+                                            csvAuditService.closeFile();
+                                            System.err.print(ex);
+                                            System.exit(1);
+                                        } catch (BookCurrentlyLentException ex1) {
+                                            csvAuditService.closeFile();
+                                            System.err.print(ex1);
+                                            System.exit(1);
+                                        }
+                                        csvAuditService.updateCSV();
+                                    }
+                                }
                                 break;
                             }
                             default:

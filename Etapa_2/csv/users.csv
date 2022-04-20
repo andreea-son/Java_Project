@@ -1,6 +1,6 @@
-userId,numOfLogins,userName,userPassword,userEmail
-1,0,Belle Garcia,BelleGarcia1,BelleGarcia1@yahoo.com
-3,1,Denise Cole,Denise03#,denise_cole3@gmail.com
-5,3,Dennis Fox,Dennis05#,dennisFox5@yahoo.com
-4,2,Ryan Ford,FordRyan04#,ryan.ford4@yahoo.com
-2,1,Daniel Roberts,Roberts02#,danielRoberts2@gmail.com
+userId,numOfLogins,userName,userPassword,userEmail,isDeleted
+1,0,Belle Garcia,BelleGarcia1,BelleGarcia1@yahoo.com,FALSE
+3,1,Denise Cole,Denise03#,denise_cole3@gmail.com,FALSE
+5,3,Dennis Fox,Dennis05#,dennisFox5@yahoo.com,FALSE
+4,2,Ryan Ford,FordRyan04#,ryan.ford4@yahoo.com,FALSE
+2,1,Daniel Roberts,Roberts02#,danielRoberts2@gmail.com,FALSE

@@ -1,17 +1,8 @@
-import java.util.ArrayList;
 public class Users extends TypeOfUser{
-    private ArrayList<LentBooks> userLentBooks = new ArrayList<>();
     private int numOfLogins;
-    private static ArrayList<_10PercentDiscount> discounts = new ArrayList<>();
 
-    public Users(int userId, int numOfLogins, String userName, String userPassword, String userEmail, ArrayList<LentBooks> userLentBooks){
-        super(userId, userName, userPassword, userEmail);
-        this.userLentBooks = userLentBooks;
-        this.numOfLogins = numOfLogins;
-    }
-
-    public Users(int userId, int numOfLogins, String userName, String userPassword, String userEmail){
-        super(userId, userName, userPassword, userEmail);
+    public Users(int userId, int numOfLogins, String userName, String userPassword, String userEmail, boolean isDeleted){
+        super(userId, userName, userPassword, userEmail, isDeleted);
         this.numOfLogins = numOfLogins;
     }
 
@@ -34,10 +25,6 @@ public class Users extends TypeOfUser{
         return getEmail();
     }
 
-    public ArrayList<LentBooks> getUserLentBooks() {
-        return userLentBooks;
-    }
-
     public int getNumOfLogins() {
         return numOfLogins;
     }
@@ -50,8 +37,12 @@ public class Users extends TypeOfUser{
         setPassword(userPassword);
     }
 
-    public static ArrayList<_10PercentDiscount> getDiscounts() {
-        return discounts;
+    public boolean getIsDeleted() {
+        return getDeleted();
+    }
+
+    public void setIsDeleted(boolean isDeleted) {
+        setDeleted(isDeleted);
     }
 
     public void print(){

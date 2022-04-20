@@ -1,34 +1,53 @@
 public class Invoice{
     private int invoiceId;
     private MyDate invoiceDate = new MyDate();
-    private LentBooks book;
-    private Users userThatLent;
+    private int userId;
     private String cardOrCash;
     private boolean discount;
-    public Invoice(int invoiceId, String invoiceDate, LentBooks book, Users userThatLent, String cardOrCash, boolean discount){
+
+    public Invoice(int invoiceId, String invoiceDate, int userId, String cardOrCash, boolean discount){
         this.invoiceId = invoiceId;
         this.invoiceDate.setDate(invoiceDate);
-        this.book = book;
-        this.userThatLent = userThatLent;
+        this.userId = userId;
         this.cardOrCash = cardOrCash;
         this.discount = discount;
     }
 
-    public Invoice(int invoiceId, String invoiceDate, LentBooks book, Users userThatLent, String cardOrCash){
+    public Invoice(int invoiceId, String invoiceDate, int userId, String cardOrCash){
         this.invoiceId = invoiceId;
         this.invoiceDate.setDate(invoiceDate);
-        this.book = book;
-        this.userThatLent = userThatLent;
+        this.userId = userId;
         this.cardOrCash = cardOrCash;
     }
 
-    public LentBooks getBook() {
-        return book;
+    public int getUserId() {
+        return userId;
+    }
+
+    public MyDate getInvoiceDate() {
+        return invoiceDate;
     }
 
     public void print(){
+        LentBooks book = new LentBooks();
+        Users user = new Users();
+        String tempDate;
+
+        for(int i = 0; i < LibrarianService.getUserLentBooks().get(userId - 1).size(); i++) {
+            if (LibrarianService.getUserLentBooks().get(userId - 1).get(i).getIsLent() && LibrarianService.getUserLentBooks().get(userId - 1).get(i).getIssuedDate().getDate().equals(invoiceDate.getDate()))
+                book = LibrarianService.getUserLentBooks().get(userId - 1).get(i);
+            else if (!LibrarianService.getUserLentBooks().get(userId - 1).get(i).getIsLent()) {
+                tempDate = LibrarianService.getUserLentBooks().get(userId - 1).get(i).getReturnDate().addDays(LibrarianService.getUserLentBooks().get(userId - 1).get(i).getExceededDays()).getDate();
+                if (tempDate.equals(invoiceDate.getDate()))
+                    book = LibrarianService.getUserLentBooks().get(userId - 1).get(i);
+            }
+        }
+
+        for(int i = 0; i < LibrarianService.getUsers().size(); i++)
+            if(LibrarianService.getUsers().get(i).getUserId() == userId)
+                user = LibrarianService.getUsers().get(i);
+
         System.out.println("invoice ID: " + invoiceId);
-        System.out.print("\n");
         System.out.print("invoice date: ");
         invoiceDate.print();
         System.out.print("\n");
@@ -48,8 +67,8 @@ public class Invoice{
             System.out.printf("%.02f", book.getExceededPrice());
             System.out.print(" ron\n");
             System.out.println("user that lent the book: ");
-            System.out.println("    user ID: " + userThatLent.getUserId());
-            System.out.println("    the name of the user: " + userThatLent.getUserName());
+            System.out.println("    user ID: " + user.getUserId());
+            System.out.println("    the name of the user: " + user.getUserName());
             System.out.println("    payed with: " + cardOrCash);
         }
         else {
@@ -73,8 +92,8 @@ public class Invoice{
                 System.out.print(" ron\n");
             }
             System.out.println("user that lent the book: ");
-            System.out.println("    user ID: " + userThatLent.getUserId());
-            System.out.println("    the name of the user: " + userThatLent.getUserName());
+            System.out.println("    user ID: " + userId);
+            System.out.println("    the name of the user: " + user.getUserName());
             System.out.println("    payed with: " + cardOrCash);
             System.out.println("Note: For every day that exceeds the return day you have to pay an additional 3 ron");
         }

@@ -17,15 +17,15 @@ public class UserService {
     }
 
     public void loginInformation() throws EmailNotFoundException, IncorrectPasswordException, IncorrectPassFormatException {
-        LibrarianService.setCounter(LibrarianService.getCounter() + 1);
-        LibrarianService.getActions1().set(LibrarianService.getCounter(), new MyAction("user: login", dtf.format(LocalDateTime.now())));
+        librarian.setCounter(librarian.getCounter() + 1);
+        librarian.getActions1().set(librarian.getCounter(), new MyAction("user: login", dtf.format(LocalDateTime.now())));
 
         int ok = 0;
         System.out.println("Enter your email: ");
         userEmail = myObj.nextLine();
-        for (int j = 0; j < LibrarianService.getUsers().size(); j++)
-            if (LibrarianService.getUsers().get(j).getUserEmail().equals(userEmail)) {
-                userId = LibrarianService.getUsers().get(j).getUserId();
+        for (int j = 0; j < librarian.getUsers().size(); j++)
+            if (librarian.getUsers().get(j).getUserEmail().equals(userEmail) && !librarian.getUsers().get(j).getIsDeleted()) {
+                userId = librarian.getUsers().get(j).getUserId();
                 ok = 1;
             }
 
@@ -33,7 +33,7 @@ public class UserService {
             throw new EmailNotFoundException("Could not find user with this email! \n");
         }
 
-        if (LibrarianService.getUsers().get(userId - 1).getNumOfLogins() == 0) {
+        if (librarian.getUsers().get(userId - 1).getNumOfLogins() == 0) {
             System.out.println("Because this is the first time you login, we generated a default password for you.");
             System.out.println("It consists of all the characters before the @ in your email.");
             System.out.println("Enter default password: ");
@@ -56,37 +56,37 @@ public class UserService {
             if (!userPassword1.matches("(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[_\\.#\\*\\+\\-\\$&!\\?@='\\[\\]\\{\\},`~\\(\\)]).{8,}"))
                 throw new IncorrectPassFormatException("This password doesn't have the required format! \n");
 
-            LibrarianService.getUsers().get(userId - 1).setUserPassword(userPassword1);
+            librarian.getUsers().get(userId - 1).setUserPassword(userPassword1);
 
         } else {
             System.out.println("Enter your password: ");
             char[] passwordChars3 = console.readPassword();
             String userPassword2 = new String(passwordChars3);
 
-            if (!LibrarianService.getUsers().get(userId - 1).getUserPassword().equals(userPassword2))
+            if (!librarian.getUsers().get(userId - 1).getUserPassword().equals(userPassword2))
                 throw new IncorrectPasswordException("You entered the wrong password!\n");
         }
 
-        LibrarianService.getUsers().get(userId - 1).setNumOfLogins(++i);
+        librarian.getUsers().get(userId - 1).setNumOfLogins(++i);
     }
 
     public void printAvailableBooks() {
-        LibrarianService.setCounter(LibrarianService.getCounter() + 1);
-        LibrarianService.getActions1().set(LibrarianService.getCounter(), new MyAction("user: print available books", dtf.format(LocalDateTime.now())));
+        librarian.setCounter(librarian.getCounter() + 1);
+        librarian.getActions1().set(librarian.getCounter(), new MyAction("user: print available books", dtf.format(LocalDateTime.now())));
 
         int ok1 = 0;
         int ok2 = 0;
-        for (Partners partner : LibrarianService.getPartners())
-            if (partner.getPartnerBooks().size() > 0) {
+        for (int i = 0; i < librarian.getPartners().size(); i++)
+            if (librarian.getPartnerBooks().get(i).size() > 0) {
                 ok1 = 1;
                 break;
             }
         if (ok1 == 0)
-            System.out.println("There are no available books! \n");
+            System.out.println("There are no books! \n");
         else {
-            for (Partners partner : LibrarianService.getPartners())
-                for (int j = 0; j < partner.getPartnerBooks().size(); j++)
-                    if (!partner.getPartnerBooks().get(j).getIsLent()) {
+            for (int i = 0; i < librarian.getPartners().size(); i++)
+                for (int j = 0; j < librarian.getPartnerBooks().get(i).size(); j++)
+                    if (!librarian.getPartnerBooks().get(i).get(j).getIsLent() && !librarian.getPartnerBooks().get(i).get(j).getIsDeleted()) {
                         ok2 = 1;
                         break;
                     }
@@ -94,10 +94,10 @@ public class UserService {
                 System.out.println("There are no available books! \n");
             else {
                 System.out.println("The books in the library: ");
-                for (Partners partner : LibrarianService.getPartners())
-                    for (int j = 0; j < partner.getPartnerBooks().size(); j++)
-                        if (!partner.getPartnerBooks().get(j).getIsLent()) {
-                            partner.getPartnerBooks().get(j).print();
+                for (int i = 0; i < librarian.getPartners().size(); i++)
+                    for (int j = 0; j < librarian.getPartnerBooks().get(i).size(); j++)
+                        if (!librarian.getPartnerBooks().get(i).get(j).getIsLent() && !librarian.getPartnerBooks().get(i).get(j).getIsDeleted()) {
+                            librarian.getPartnerBooks().get(i).get(j).print();
                             System.out.print("\n");
                         }
             }
@@ -105,13 +105,13 @@ public class UserService {
     }
 
     public void printLentBooks() {
-        LibrarianService.setCounter(LibrarianService.getCounter() + 1);
-        LibrarianService.getActions1().set(LibrarianService.getCounter(), new MyAction("user: print lent books", dtf.format(LocalDateTime.now())));
+        librarian.setCounter(librarian.getCounter() + 1);
+        librarian.getActions1().set(librarian.getCounter(), new MyAction("user: print lent books", dtf.format(LocalDateTime.now())));
 
         int ok = 0;
-        if (LibrarianService.getUsers().get(userId - 1).getUserLentBooks().size() > 0) {
-            for (int j = 0; j < LibrarianService.getUsers().get(userId - 1).getUserLentBooks().size(); j++)
-                if (LibrarianService.getUsers().get(userId - 1).getUserLentBooks().get(j).getIsLent()) {
+        if (librarian.getUserLentBooks().get(userId - 1).size() > 0) {
+            for (int j = 0; j < librarian.getUserLentBooks().get(userId - 1).size(); j++)
+                if (librarian.getUserLentBooks().get(userId - 1).get(j).getIsLent()) {
                     ok = 1;
                     break;
                 }
@@ -119,9 +119,9 @@ public class UserService {
                 System.out.println("You didn't lend any books! \n");
             else {
                 System.out.println("Currently lent books: ");
-                for (int j = 0; j < LibrarianService.getUsers().get(userId - 1).getUserLentBooks().size(); j++)
-                    if (LibrarianService.getUsers().get(userId - 1).getUserLentBooks().get(j).getIsLent()) {
-                        LibrarianService.getUsers().get(userId - 1).getUserLentBooks().get(j).print();
+                for (int j = 0; j < librarian.getUserLentBooks().get(userId - 1).size(); j++)
+                    if (librarian.getUserLentBooks().get(userId - 1).get(j).getIsLent()) {
+                        librarian.getUserLentBooks().get(userId - 1).get(j).print();
                         System.out.print("\n");
                     }
             }
@@ -132,13 +132,13 @@ public class UserService {
     }
 
     public void printReturnedBooks(){
-        LibrarianService.setCounter(LibrarianService.getCounter() + 1);
-        LibrarianService.getActions1().set(LibrarianService.getCounter(), new MyAction("user: print returned books", dtf.format(LocalDateTime.now())));
+        librarian.setCounter(librarian.getCounter() + 1);
+        librarian.getActions1().set(librarian.getCounter(), new MyAction("user: print returned books", dtf.format(LocalDateTime.now())));
 
         int ok = 0;
-        if (LibrarianService.getUsers().get(userId - 1).getUserLentBooks().size() > 0) {
-            for (int j = 0; j < LibrarianService.getUsers().get(userId - 1).getUserLentBooks().size(); j++)
-                if (!LibrarianService.getUsers().get(userId - 1).getUserLentBooks().get(j).getIsLent()) {
+        if (librarian.getUserLentBooks().get(userId - 1).size() > 0) {
+            for (int j = 0; j < librarian.getUserLentBooks().get(userId - 1).size(); j++)
+                if (!librarian.getUserLentBooks().get(userId - 1).get(j).getIsLent()) {
                     ok = 1;
                     break;
                 }
@@ -146,9 +146,9 @@ public class UserService {
                 System.out.println("You didn't return any books! \n");
             else {
                 System.out.println("Returned books: ");
-                for (int j = 0; j < LibrarianService.getUsers().get(userId - 1).getUserLentBooks().size(); j++)
-                    if (!LibrarianService.getUsers().get(userId - 1).getUserLentBooks().get(j).getIsLent()) {
-                        LibrarianService.getUsers().get(userId - 1).getUserLentBooks().get(j).print();
+                for (int j = 0; j < librarian.getUserLentBooks().get(userId - 1).size(); j++)
+                    if (!librarian.getUserLentBooks().get(userId - 1).get(j).getIsLent()) {
+                        librarian.getUserLentBooks().get(userId - 1).get(j).print();
                         System.out.print("\n");
                     }
             }
@@ -159,15 +159,15 @@ public class UserService {
     }
 
     public void printDiscounts() {
-        LibrarianService.setCounter(LibrarianService.getCounter() + 1);
-        LibrarianService.getActions1().set(LibrarianService.getCounter(), new MyAction("user: print discounts", dtf.format(LocalDateTime.now())));
+        librarian.setCounter(librarian.getCounter() + 1);
+        librarian.getActions1().set(librarian.getCounter(), new MyAction("user: print discounts", dtf.format(LocalDateTime.now())));
 
         int ok = 0;
-        if (LibrarianService.getUsers().get(userId - 1).getDiscounts().size() > 0) {
-            for (int j = 0; j < LibrarianService.getUsers().get(userId - 1).getDiscounts().size(); j++)
-                if (!LibrarianService.getUsers().get(userId - 1).getDiscounts().get(j).getIsUsed()) {
-                    if(LibrarianService.getLastDate().isBiggerThan(LibrarianService.getUsers().get(userId - 1).getDiscounts().get(j).getExpirationDate()))
-                        LibrarianService.getUsers().get(userId - 1).getDiscounts().get(j).setIsUsed(true);
+        if (librarian.getDiscounts().size() > 0) {
+            for (int j = 0; j < librarian.getDiscounts().get(userId - 1).size(); j++)
+                if (!librarian.getDiscounts().get(userId - 1).get(j).getIsUsed()) {
+                    if(librarian.getLastDate().isBiggerThan(librarian.getDiscounts().get(userId - 1).get(j).getExpirationDate()))
+                        librarian.getDiscounts().get(userId - 1).get(j).setIsUsed(true);
                     else {
                         ok = 1;
                     }
@@ -176,9 +176,9 @@ public class UserService {
                 System.out.println("You haven't earned any discounts yet! \n");
             else {
                 System.out.println("Current discounts: ");
-                for (int j = 0; j < LibrarianService.getUsers().get(userId - 1).getDiscounts().size(); j++)
-                    if (!LibrarianService.getUsers().get(userId - 1).getDiscounts().get(j).getIsUsed()) {
-                        LibrarianService.getUsers().get(userId - 1).getDiscounts().get(j).print();
+                for (int j = 0; j < librarian.getDiscounts().get(userId - 1).size(); j++)
+                    if (!librarian.getDiscounts().get(userId - 1).get(j).getIsUsed()) {
+                        librarian.getDiscounts().get(userId - 1).get(j).print();
                         System.out.print("\n");
                     }
             }

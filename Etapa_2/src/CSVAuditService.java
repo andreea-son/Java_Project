@@ -6,6 +6,7 @@ public class CSVAuditService {
 
     private static FileWriter csvAuditFile;
     private static PrintWriter out;
+    private static LibrarianService librarian = new LibrarianService();
 
     public CSVAuditService(){
         try {
@@ -23,7 +24,7 @@ public class CSVAuditService {
     }
 
     public void updateCSV(){
-        out.printf("%s,%s\n",LibrarianService.getActions1().get(LibrarianService.getActions1().size() - 1).getNameOfAction(), LibrarianService.getActions1().get(LibrarianService.getActions1().size() - 1).getDateTime());
+        out.printf("%s,%s\n",librarian.getActions1().get(LibrarianService.getActions1().size() - 1).getNameOfAction(), librarian.getActions1().get(LibrarianService.getActions1().size() - 1).getDateTime());
     }
 
     public void closeFile(){

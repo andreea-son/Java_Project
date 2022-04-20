@@ -1,25 +1,9 @@
-import java.util.ArrayList;
 public class Partners extends TypeOfUser{
-    private ArrayList<Books> partnerBooks = new ArrayList<>();
     private int numOfLogins;
 
-    public Partners(int partnerId, int numOfLogins, String partnerName, String partnerPassword, String partnerEmail, ArrayList<Books> partnerBooks){
-        super(partnerId, partnerName, partnerPassword, partnerEmail);
-        this.partnerBooks = partnerBooks;
+    public Partners(int partnerId, int numOfLogins, String partnerName, String partnerPassword, String partnerEmail, boolean isDeleted){
+        super(partnerId, partnerName, partnerPassword, partnerEmail, isDeleted);
         this.numOfLogins = numOfLogins;
-    }
-
-    public Partners(int partnerId, int numOfLogins, String partnerName, String partnerPassword, String partnerEmail){
-        super(partnerId, partnerName, partnerPassword, partnerEmail);
-        this.numOfLogins = numOfLogins;
-    }
-
-    public ArrayList<Books> getPartnerBooks() {
-        return partnerBooks;
-    }
-
-    public String getPartnerName() {
-        return getName();
     }
 
     public String getPartnerPassword() {
@@ -46,6 +30,14 @@ public class Partners extends TypeOfUser{
         setPassword(partnerPassword);
     }
 
+    public boolean getIsDeleted() {
+        return getDeleted();
+    }
+
+    public void setIsDeleted(boolean isDeleted) {
+         setDeleted(isDeleted);
+    }
+
     public void print() {
         System.out.print("partner ID: ");
         System.out.println(getId());
@@ -54,5 +46,4 @@ public class Partners extends TypeOfUser{
         System.out.print("    partner's email: ");
         System.out.println(getEmail());
     }
-
 }

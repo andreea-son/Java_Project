@@ -1,7 +1,3 @@
-import java.time.LocalDate;
-import java.lang.Integer;
-import java.util.Objects;
-
 public class LentBooks extends Books{
     private long daysFromIssue;
     private MyDate issuedDate = new MyDate();
@@ -9,10 +5,10 @@ public class LentBooks extends Books{
     private float exceededPrice;
     private MyDate returnDate = new MyDate();
     private long exceededDays;
-    private boolean isDeleted;
+    private int userId;
 
-    public LentBooks(int bookId, boolean isDeleted, String author, String title, String description, String issuedDate, long daysFromIssue, boolean isLent){
-        super(bookId, author, title, description, isLent);
+    public LentBooks(int bookId, boolean isDeleted, String author, String title, String description, String issuedDate, long daysFromIssue, boolean isLent, int sectionId, int partnerId, int userId){
+        super(bookId, author, title, description, isLent, isDeleted, sectionId, partnerId);
         this.daysFromIssue = daysFromIssue;
         this.price = 2 * daysFromIssue;
         this.issuedDate.setDate(issuedDate);
@@ -22,11 +18,11 @@ public class LentBooks extends Books{
 
         this.returnDate.setDate(this.issuedDate.addDays(daysFromIssue).getDate());
 
-        this.isDeleted = isDeleted;
+        this.userId = userId;
     }
 
-    public LentBooks(int bookId, boolean isDeleted, String author, String title, String description, String issuedDate, boolean isLent){
-        super(bookId, author, title, description, isLent);
+    public LentBooks(int bookId, boolean isDeleted, String author, String title, String description, String issuedDate, boolean isLent, int sectionId, int partnerId, int userId){
+        super(bookId, author, title, description, isLent, isDeleted, sectionId, partnerId);
         this.price = 0;
         this.issuedDate.setDate(issuedDate);
 
@@ -35,10 +31,14 @@ public class LentBooks extends Books{
 
         this.returnDate.setDate(this.issuedDate.addDays(daysFromIssue).getDate());
 
-        this.isDeleted = isDeleted;
+        this.userId = userId;
     }
 
     public LentBooks(){
+    }
+
+    public int getUserId() {
+        return userId;
     }
 
     public MyDate getIssuedDate() {
@@ -65,20 +65,12 @@ public class LentBooks extends Books{
         return exceededPrice;
     }
 
-    public boolean getIsDeleted() {
-        return isDeleted;
-    }
-
     public void setExceededPrice1(long exceededPrice) {
         this.exceededPrice = exceededPrice;
     }
 
     public void setExceededDays1(long exceededDays) {
         this.exceededDays = exceededDays;
-    }
-
-    public void setIsDeleted(boolean deleted) {
-        isDeleted = deleted;
     }
 
     public void setReturnDate(String returnDate) {
@@ -113,7 +105,7 @@ public class LentBooks extends Books{
             System.out.printf("%.02f", price);
             System.out.print(" ron\n");
         }
-        if(isDeleted)
+        if(super.getIsDeleted())
             System.out.println("    (the book was deleted)");
     }
 

@@ -1,8 +1,8 @@
-sectionId,sectionName
-3,science fiction
-1,classics
-4,dystopian
-2,allegories
-6,horror
-5,fantasy
-7,comedy
+sectionId,sectionName,isDeleted
+3,science fiction,FALSE
+1,classics,FALSE
+4,dystopian,FALSE
+2,allegories,FALSE
+6,horror,FALSE
+5,fantasy,FALSE
+7,comedy,FALSE

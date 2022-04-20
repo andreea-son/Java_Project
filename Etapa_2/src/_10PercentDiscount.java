@@ -1,10 +1,12 @@
 public class _10PercentDiscount {
     private String code;
     private MyDate expirationDate = new MyDate();
+    private int userId;
     private boolean isUsed;
 
-    public _10PercentDiscount(String code, String expirationDate, boolean isUsed){
+    public _10PercentDiscount(String code, String expirationDate, int userId, boolean isUsed){
         this.code = code;
+        this.userId = userId;
         this.expirationDate.setDate(expirationDate);
         this.isUsed = isUsed;
     }
@@ -22,6 +24,10 @@ public class _10PercentDiscount {
 
     public boolean getIsUsed() {
         return isUsed;
+    }
+
+    public int getUserId() {
+        return userId;
     }
 
     public void setIsUsed(boolean used) {

@@ -9,20 +9,14 @@ public class CSVPartnerService {
     private String lineToRead;
     private ArrayList<String> listPartners1 = new ArrayList<>();
     private ArrayList<String> listPartners2 = new ArrayList<>();
-    private ArrayList<ArrayList<String>> listPartnerBooks = new ArrayList<>(100);
     private static String[][] partnerField = new String[100][];
-    private static String[][] partnerBooksField = new String[100][];
     private static Integer[] partnerId = new Integer[100];
     private static Integer[] numOfLogins = new Integer[100];
     private static String[] partnerName = new String[100];
     private static String[] partnerPassword = new String[100];
     private static String[] partnerEmail = new String[100];
-    private static String[] partnerBooksPath = new String[100];
-    private static Integer[][] bookId = new Integer[100][];
-    private static String[][] author = new String[100][];
-    private static String[][] title = new String[100][];
-    private static String[][] description = new String[100][];
-    private static boolean[][] isLent = new boolean[100][];
+    private static boolean[] isDeleted = new boolean[100];
+    private static LibrarianService librarian = new LibrarianService();
 
     private static CSVPartnerService csvPartnerService = new CSVPartnerService();
 
@@ -72,77 +66,9 @@ public class CSVPartnerService {
             partnerEmail[i] = partnerField[i][4];
 
         for (int i = 0; i < listPartners2.size(); i++)
-            if (!partnerField[i][5].equals("null"))
-                partnerBooksPath[i] = partnerField[i][5];
-            else {
-                partnerBooksPath[i] = "";
-            }
+            isDeleted[i] = Boolean.parseBoolean(partnerField[i][5]);
+
         for (int i = 0; i < listPartners2.size(); i++)
-           LibrarianService.getPartners().add(new Partners(partnerId[i], numOfLogins[i], partnerName[i], partnerPassword[i], partnerEmail[i]));
-    }
-
-    public void readPartnerBooks() {
-        for (int i = 0; i < 100; i++)
-            partnerBooksField[i] = new String[20];
-
-        for (int i = 0; i < 100; i++)
-            listPartnerBooks.add(new ArrayList<>());
-
-        for (int i = 0; i < 100; i++)
-            bookId[i] = new Integer[20];
-
-        for (int i = 0; i < 100; i++)
-            author[i] = new String[20];
-
-        for (int i = 0; i < 100; i++)
-            title[i] = new String[20];
-
-        for (int i = 0; i < 100; i++)
-            description[i] = new String[20];
-
-        for (int i = 0; i < 100; i++)
-            isLent[i] = new boolean[20];
-
-        for (int i = 0; i < listPartners2.size(); i++) {
-            if (!partnerBooksPath[i].isEmpty()) {
-                CSVPath = partnerBooksPath[i];
-                try {
-                    BufferedReader bufferedReader = new BufferedReader(new FileReader(CSVPath));
-                    while ((lineToRead = bufferedReader.readLine()) != null) {
-                        listPartnerBooks.get(i).add(lineToRead);
-                    }
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-                for (int j = 1; j < listPartnerBooks.get(i).size(); j++)
-                    partnerBooksField[j - 1] = listPartnerBooks.get(i).get(j).split("\\s*,\\s*");
-
-                for (int j = 1; j < listPartnerBooks.get(i).size(); j++)
-                    bookId[i][j - 1] = Integer.parseInt(partnerBooksField[j - 1][0]);
-
-                for (int j = 1; j < listPartnerBooks.get(i).size(); j++)
-                    author[i][j - 1] = partnerBooksField[j - 1][1];
-
-                for (int j = 1; j < listPartnerBooks.get(i).size(); j++)
-                    title[i][j - 1] = partnerBooksField[j - 1][2];
-
-                for (int j = 1; j < listPartnerBooks.get(i).size(); j++)
-                    description[i][j - 1] = partnerBooksField[j - 1][3];
-
-                for (int j = 1; j < listPartnerBooks.get(i).size(); j++)
-                    isLent[i][j - 1] = Boolean.parseBoolean(partnerBooksField[j - 1][4]);
-
-                for (int j = 1; j < listPartnerBooks.get(i).size(); j++)
-                    LibrarianService.getPartners().get(i).getPartnerBooks().add(new Books(bookId[i][j - 1], author[i][j - 1], title[i][j - 1], description[i][j - 1], isLent[i][j - 1]));
-            }
-        }
-        for (int j = 0; j < LibrarianService.getPartners().size(); j++)
-            LibrarianService.getPartners().set(j, new Partners(partnerId[j], numOfLogins[j], partnerName[j], partnerPassword[j], partnerEmail[j], LibrarianService.getPartners().get(j).getPartnerBooks()));
-
-        for (int i = 0; i < LibrarianService.getPartners().size(); i++)
-            PartnerService.getPartnerBooks().get(i).addAll(LibrarianService.getPartners().get(i).getPartnerBooks());
+           librarian.getPartners().add(new Partners(partnerId[i], numOfLogins[i], partnerName[i], partnerPassword[i], partnerEmail[i], isDeleted[i]));
     }
 }

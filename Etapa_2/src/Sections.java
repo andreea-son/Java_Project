@@ -1,28 +1,27 @@
-import java.util.ArrayList;
 public class Sections{
     private int sectionId;
     private String sectionName;
-    private ArrayList<Books> sectionBooks = new ArrayList<>();
-    public Sections(int sectionId, String sectionName, ArrayList<Books> sectionBooks){
-        this.sectionName = sectionName;
-        this.sectionBooks = sectionBooks;
-        this.sectionId = sectionId;
-    }
-    public Sections(int sectionId, String sectionName){
+    private boolean isDeleted;
+    public Sections(int sectionId, String sectionName, boolean isDeleted){
         this.sectionName = sectionName;
         this.sectionId = sectionId;
+        this.isDeleted = isDeleted;
     }
 
     public String getSectionName() {
         return sectionName;
     }
 
-    public ArrayList<Books> getSectionBooks() {
-        return sectionBooks;
-    }
-
     public int getSectionId() {
         return sectionId;
+    }
+
+    public boolean getIsDeleted() {
+        return isDeleted;
+    }
+
+    public void setIsDeleted(boolean deleted) {
+        isDeleted = deleted;
     }
 
     public void print(){

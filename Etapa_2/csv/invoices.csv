@@ -1,7 +1,7 @@
-invoiceId,invoiceDate,bookId,issuedDateBook,userId,cardOrCash
-1,2022-05-04,2,2022-05-04,3,card
-5,2022-05-20,6,2022-05-20,3,cash
-2,2022-05-07,10,2022-05-07,3,card
-4,2022-05-14,5,2022-05-14,4,card
-3,2022-05-12,9,2022-05-12,4,cash
-6,2022-05-23,8,2022-05-23,5,card
+invoiceId,invoiceDate,userId,cardOrCash
+1,2022-05-04,3,card
+5,2022-05-20,3,cash
+2,2022-05-07,3,card
+4,2022-05-14,4,card
+3,2022-05-12,4,cash
+6,2022-05-23,5,card

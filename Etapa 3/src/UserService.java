@@ -103,7 +103,7 @@ public class UserService {
                 String author = result3.getString(2);
                 String title = result3.getString(3);
                 String description = result3.getString(4);
-                System.out.println("book id: " + bookId);
+                System.out.println("book ID: " + bookId);
                 System.out.println("\tauthor: " + author);
                 System.out.println("\ttitle: " + title);
                 System.out.println("\tdescription: " + description);
@@ -115,7 +115,7 @@ public class UserService {
                 String author = result3.getString(2);
                 String title = result3.getString(3);
                 String description = result3.getString(4);
-                System.out.println("book id: " + bookId);
+                System.out.println("book ID: " + bookId);
                 System.out.println("\tauthor: " + author);
                 System.out.println("\ttitle: " + title);
                 System.out.println("\tdescription: " + description);
@@ -151,7 +151,7 @@ public class UserService {
                 String issuedDate = result2.getString(5);
                 String returnDate = result2.getString(7);
                 float price = result2.getFloat(12);
-                System.out.println("book id: " + bookId);
+                System.out.println("book ID: " + bookId);
                 System.out.println("\tauthor: " + author);
                 System.out.println("\ttitle: " + title);
                 System.out.println("\tdescription: " + description);
@@ -171,7 +171,7 @@ public class UserService {
                 String issuedDate = result2.getString(5);
                 String returnDate = result2.getString(7);
                 float price = result2.getFloat(12);
-                System.out.println("book id: " + bookId);
+                System.out.println("book ID: " + bookId);
                 System.out.println("\tauthor: " + author);
                 System.out.println("\ttitle: " + title);
                 System.out.println("\tdescription: " + description);
@@ -214,7 +214,7 @@ public class UserService {
                 float price = result2.getFloat(12);
                 int exceededDays = result2.getInt(13);
                 float exceededPrice = result2.getFloat(14);
-                System.out.println("book id: " + bookId);
+                System.out.println("book ID: " + bookId);
                 System.out.println("\tauthor: " + author);
                 System.out.println("\ttitle: " + title);
                 System.out.println("\tdescription: " + description);
@@ -248,7 +248,7 @@ public class UserService {
                 float price = result2.getFloat(12);
                 int exceededDays = result2.getInt(13);
                 float exceededPrice = result2.getFloat(14);
-                System.out.println("book id: " + bookId);
+                System.out.println("book ID: " + bookId);
                 System.out.println("\tauthor: " + author);
                 System.out.println("\ttitle: " + title);
                 System.out.println("\tdescription: " + description);
@@ -311,7 +311,7 @@ public class UserService {
                 String code = result2.getString(1);
                 MyDate expirationDate = new MyDate();
                 expirationDate.setDate(result2.getString(2));
-                System.out.print("\nthe code: " + code + ", the expiration date: ");
+                System.out.print("\ncode: " + code + ", expiration date: ");
                 expirationDate.print();
             }
             System.out.print("\n");

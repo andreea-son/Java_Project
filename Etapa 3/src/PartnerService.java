@@ -167,7 +167,7 @@ public class PartnerService {
                 String author = result2.getString(2);
                 String title = result2.getString(3);
                 String description = result2.getString(4);
-                System.out.println("book id: " + bookId);
+                System.out.println("book ID: " + bookId);
                 System.out.println("\tauthor: " + author);
                 System.out.println("\ttitle: " + title);
                 System.out.println("\tdescription: " + description);
@@ -179,7 +179,7 @@ public class PartnerService {
                 String author = result2.getString(2);
                 String title = result2.getString(3);
                 String description = result2.getString(4);
-                System.out.println("book id: " + bookId);
+                System.out.println("book ID: " + bookId);
                 System.out.println("\tauthor: " + author);
                 System.out.println("\ttitle: " + title);
                 System.out.println("\tdescription: " + description);

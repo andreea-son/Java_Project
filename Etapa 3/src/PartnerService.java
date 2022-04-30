@@ -140,6 +140,8 @@ public class PartnerService {
         statement.close();
 
         counter = 0;
+
+        System.out.println("Book added successfully!");
     }
 
     public void printPartnerBooks() throws SQLException {

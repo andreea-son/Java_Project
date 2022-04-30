@@ -251,6 +251,7 @@ public class LibrarianService {
         sections.add(new Sections(sectionId, sectionName, false));
 
         statement2.close();
+        System.out.println("Section added successfully!");
     }
 
     public void insertPartner() throws SQLException, IncorrectMailFormatException, AlreadyUsedEmailException {
@@ -283,6 +284,7 @@ public class LibrarianService {
         partners.add(new Partners(partnerId, 0, partnerName, partnerPassword, partnerEmail, false));
 
         statement2.close();
+        System.out.println("Partner added successfully!");
     }
 
     public void insertUser() throws SQLException, IncorrectMailFormatException, AlreadyUsedEmailException {
@@ -315,6 +317,7 @@ public class LibrarianService {
         users.add(new Users(userId, 0, userName, userPassword, userEmail, false));
 
         statement.close();
+        System.out.println("User added successfully!");
     }
 
     public void lendNewBook() throws BookNotFoundException, BookAlreadyLentException, UserNotFoundException, IncorrectDateFormatException, MaxNumOfDaysException, WrongInputException, InvalidCodeException, DateNotValidException, SQLException {
@@ -1026,7 +1029,7 @@ public class LibrarianService {
                     String author = result3.getString(2);
                     String title = result3.getString(3);
                     String description = result3.getString(4);
-                    System.out.println("book id: " + bookId);
+                    System.out.println("book ID: " + bookId);
                     System.out.println("\tauthor: " + author);
                     System.out.println("\ttitle: " + title);
                     System.out.println("\tdescription: " + description);
@@ -1038,7 +1041,7 @@ public class LibrarianService {
                     String author = result3.getString(2);
                     String title = result3.getString(3);
                     String description = result3.getString(4);
-                    System.out.println("book id: " + bookId);
+                    System.out.println("book ID: " + bookId);
                     System.out.println("\tauthor: " + author);
                     System.out.println("\ttitle: " + title);
                     System.out.println("\tdescription: " + description);
@@ -1097,7 +1100,7 @@ public class LibrarianService {
                     String author = result3.getString(2);
                     String title = result3.getString(3);
                     String description = result3.getString(4);
-                    System.out.println("book id: " + bookId);
+                    System.out.println("book ID: " + bookId);
                     System.out.println("\tauthor: " + author);
                     System.out.println("\ttitle: " + title);
                     System.out.println("\tdescription: " + description);
@@ -1109,7 +1112,7 @@ public class LibrarianService {
                     String author = result3.getString(2);
                     String title = result3.getString(3);
                     String description = result3.getString(4);
-                    System.out.println("book id: " + bookId);
+                    System.out.println("book ID: " + bookId);
                     System.out.println("\tauthor: " + author);
                     System.out.println("\ttitle: " + title);
                     System.out.println("\tdescription: " + description);
@@ -1171,7 +1174,7 @@ public class LibrarianService {
                     String issuedDate = result3.getString(5);
                     String returnDate = result3.getString(7);
                     float price = result3.getFloat(12);
-                    System.out.println("book id: " + bookId);
+                    System.out.println("book ID: " + bookId);
                     System.out.println("\tauthor: " + author);
                     System.out.println("\ttitle: " + title);
                     System.out.println("\tdescription: " + description);
@@ -1191,7 +1194,7 @@ public class LibrarianService {
                     String issuedDate = result3.getString(5);
                     String returnDate = result3.getString(7);
                     float price = result3.getFloat(12);
-                    System.out.println("book id: " + bookId);
+                    System.out.println("book ID: " + bookId);
                     System.out.println("\tauthor: " + author);
                     System.out.println("\ttitle: " + title);
                     System.out.println("\tdescription: " + description);
@@ -1260,7 +1263,7 @@ public class LibrarianService {
                     float price = result3.getFloat(12);
                     int exceededDays = result3.getInt(13);
                     float exceededPrice = result3.getFloat(14);
-                    System.out.println("book id: " + bookId);
+                    System.out.println("book ID: " + bookId);
                     System.out.println("\tauthor: " + author);
                     System.out.println("\ttitle: " + title);
                     System.out.println("\tdescription: " + description);
@@ -1294,7 +1297,7 @@ public class LibrarianService {
                     float price = result3.getFloat(12);
                     int exceededDays = result3.getInt(13);
                     float exceededPrice = result3.getFloat(14);
-                    System.out.println("book id: " + bookId);
+                    System.out.println("book ID: " + bookId);
                     System.out.println("\tauthor: " + author);
                     System.out.println("\ttitle: " + title);
                     System.out.println("\tdescription: " + description);
@@ -1348,8 +1351,9 @@ public class LibrarianService {
                 String description = result3.getString(4);
                 String issuedDate = result3.getString(5);
                 String returnDate = result3.getString(7);
+                int userId1 = result3.getInt(11);
                 float price = result3.getFloat(12);
-                System.out.println("book id: " + bookId);
+                System.out.println("book ID: " + bookId);
                 System.out.println("\tauthor: " + author);
                 System.out.println("\ttitle: " + title);
                 System.out.println("\tdescription: " + description);
@@ -1358,6 +1362,10 @@ public class LibrarianService {
                 System.out.print("\tprice: ");
                 System.out.printf("%.02f", price);
                 System.out.print(" ron\n");
+                System.out.println("Lent by: ");
+                System.out.println("user ID: " + userId1);
+                System.out.println("\tuser name: " + users.get(userId1 - 1).getUserName());
+                System.out.println("\tuser email: " + users.get(userId1 - 1).getUserEmail());
                 System.out.print("\n");
                 countLentBook--;
             }
@@ -1368,8 +1376,9 @@ public class LibrarianService {
                 String description = result3.getString(4);
                 String issuedDate = result3.getString(5);
                 String returnDate = result3.getString(7);
+                int userId1 = result3.getInt(11);
                 float price = result3.getFloat(12);
-                System.out.println("book id: " + bookId);
+                System.out.println("book ID: " + bookId);
                 System.out.println("\tauthor: " + author);
                 System.out.println("\ttitle: " + title);
                 System.out.println("\tdescription: " + description);
@@ -1378,6 +1387,10 @@ public class LibrarianService {
                 System.out.print("\tprice: ");
                 System.out.printf("%.02f", price);
                 System.out.print(" ron\n");
+                System.out.println("Lent by: ");
+                System.out.println("user ID: " + userId1);
+                System.out.println("\tuser name: " + users.get(userId1 - 1).getUserName());
+                System.out.println("\tuser email: " + users.get(userId1 - 1).getUserEmail());
             }
             statement2.close();
         }
@@ -1408,7 +1421,7 @@ public class LibrarianService {
                 String author = result3.getString(2);
                 String title = result3.getString(3);
                 String description = result3.getString(4);
-                System.out.println("book id: " + bookId);
+                System.out.println("book ID: " + bookId);
                 System.out.println("\tauthor: " + author);
                 System.out.println("\ttitle: " + title);
                 System.out.println("\tdescription: " + description);
@@ -1420,7 +1433,7 @@ public class LibrarianService {
                 String author = result3.getString(2);
                 String title = result3.getString(3);
                 String description = result3.getString(4);
-                System.out.println("book id: " + bookId);
+                System.out.println("book ID: " + bookId);
                 System.out.println("\tauthor: " + author);
                 System.out.println("\ttitle: " + title);
                 System.out.println("\tdescription: " + description);
@@ -1487,7 +1500,7 @@ public class LibrarianService {
                     String code = result3.getString(1);
                     MyDate expirationDate = new MyDate();
                     expirationDate.setDate(result3.getString(2));
-                    System.out.print("\nthe code: " + code + ", the expiration date: ");
+                    System.out.print("\ncode: " + code + ", expiration date: ");
                     expirationDate.print();
                 }
                 System.out.print("\n");
@@ -1685,7 +1698,7 @@ public class LibrarianService {
                             }
 
                 if (ok3 == 1)
-                    throw new BookCurrentlyLentException("This partner added a book that is currently lent. If you remove this partner, you will automatically remove the book!");
+                    throw new BookCurrentlyLentException("This partner added a book that is currently lent. You can't remove the book!");
 
                 Statement statement = connection.createStatement();
                 statement.executeUpdate("DELETE FROM SECTION WHERE SECTION_ID = " + partnerId1);

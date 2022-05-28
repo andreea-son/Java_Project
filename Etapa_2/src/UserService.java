@@ -1,4 +1,3 @@
-import java.io.Console;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
@@ -9,7 +8,6 @@ public class UserService {
     private static int userId;
     private static int i;
     private Scanner myObj = new Scanner(System.in);
-    private Console console = System.console();
     private final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
 
     public UserService() {
@@ -21,7 +19,10 @@ public class UserService {
         librarian.getActions1().set(librarian.getCounter(), new MyAction("user: login", dtf.format(LocalDateTime.now())));
 
         int ok = 0;
-        System.out.println("Enter your email: ");
+        String defaultPassword;
+        String userPassword1;
+        String userPassword2;
+        System.out.println("\nEmail: ");
         userEmail = myObj.nextLine();
         for (int j = 0; j < librarian.getUsers().size(); j++)
             if (librarian.getUsers().get(j).getUserEmail().equals(userEmail) && !librarian.getUsers().get(j).getIsDeleted()) {
@@ -30,41 +31,38 @@ public class UserService {
             }
 
         if (ok == 0) {
-            throw new EmailNotFoundException("Could not find user with this email! \n");
+            throw new EmailNotFoundException("Could not find user with this email!");
         }
 
         if (librarian.getUsers().get(userId - 1).getNumOfLogins() == 0) {
             System.out.println("Because this is the first time you login, we generated a default password for you.");
             System.out.println("It consists of all the characters before the @ in your email.");
-            System.out.println("Enter default password: ");
+            System.out.println("Default password: ");
 
-            char[] passwordChars1 = console.readPassword();
-            String defaultPassword = new String(passwordChars1);
+            defaultPassword = myObj.nextLine();
 
             String[] password = userEmail.split("@");
             String aux = password[0];
 
             if (!defaultPassword.equals(aux))
-                throw new IncorrectPasswordException("You entered the wrong default password!\n");
+                throw new IncorrectPasswordException("You entered the wrong default password!");
 
             System.out.println("Enter your new password in the following format: ");
             System.out.println("At least 8 characters, minimum 1 lowercase, 1 uppercase, 1 special character and 1 digit");
 
-            char[] passwordChars2 = console.readPassword();
-            String userPassword1 = new String(passwordChars2);
+            userPassword1 = myObj.nextLine();
 
             if (!userPassword1.matches("(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[_\\.#\\*\\+\\-\\$&!\\?@='\\[\\]\\{\\},`~\\(\\)]).{8,}"))
-                throw new IncorrectPassFormatException("This password doesn't have the required format! \n");
+                throw new IncorrectPassFormatException("This password doesn't have the required format!");
 
             librarian.getUsers().get(userId - 1).setUserPassword(userPassword1);
 
         } else {
-            System.out.println("Enter your password: ");
-            char[] passwordChars3 = console.readPassword();
-            String userPassword2 = new String(passwordChars3);
+            System.out.println("Password: ");
+            userPassword2 = myObj.nextLine();
 
             if (!librarian.getUsers().get(userId - 1).getUserPassword().equals(userPassword2))
-                throw new IncorrectPasswordException("You entered the wrong password!\n");
+                throw new IncorrectPasswordException("You entered the wrong password!");
         }
 
         librarian.getUsers().get(userId - 1).setNumOfLogins(++i);
@@ -82,7 +80,7 @@ public class UserService {
                 break;
             }
         if (ok1 == 0)
-            System.out.println("There are no books! \n");
+            System.out.println("\nThere are no available books! ");
         else {
             for (int i = 0; i < librarian.getPartners().size(); i++)
                 for (int j = 0; j < librarian.getPartnerBooks().get(i).size(); j++)
@@ -91,9 +89,9 @@ public class UserService {
                         break;
                     }
             if (ok2 == 0)
-                System.out.println("There are no available books! \n");
+                System.out.println("\nThere are no available books! ");
             else {
-                System.out.println("The books in the library: ");
+                System.out.println("\nAvailable books:\n");
                 for (int i = 0; i < librarian.getPartners().size(); i++)
                     for (int j = 0; j < librarian.getPartnerBooks().get(i).size(); j++)
                         if (!librarian.getPartnerBooks().get(i).get(j).getIsLent() && !librarian.getPartnerBooks().get(i).get(j).getIsDeleted()) {
@@ -116,9 +114,9 @@ public class UserService {
                     break;
                 }
             if (ok == 0)
-                System.out.println("You didn't lend any books! \n");
+                System.out.println("\nYou didn't lend any books!");
             else {
-                System.out.println("Currently lent books: ");
+                System.out.println("\nYour lent books:\n");
                 for (int j = 0; j < librarian.getUserLentBooks().get(userId - 1).size(); j++)
                     if (librarian.getUserLentBooks().get(userId - 1).get(j).getIsLent()) {
                         librarian.getUserLentBooks().get(userId - 1).get(j).print();
@@ -127,7 +125,7 @@ public class UserService {
             }
         }
         else {
-            System.out.println("You didn't lend any books! \n");
+            System.out.println("\nYou didn't lend any books!");
         }
     }
 
@@ -143,9 +141,9 @@ public class UserService {
                     break;
                 }
             if(ok == 0)
-                System.out.println("You didn't return any books! \n");
+                System.out.println("\nYou didn't return any books!");
             else {
-                System.out.println("Returned books: ");
+                System.out.println("\nYour returned books:\n");
                 for (int j = 0; j < librarian.getUserLentBooks().get(userId - 1).size(); j++)
                     if (!librarian.getUserLentBooks().get(userId - 1).get(j).getIsLent()) {
                         librarian.getUserLentBooks().get(userId - 1).get(j).print();
@@ -154,7 +152,7 @@ public class UserService {
             }
         }
         else {
-            System.out.println("You didn't return any books! \n");
+            System.out.println("\nYou didn't return any books!");
         }
     }
 
@@ -173,9 +171,9 @@ public class UserService {
                     }
                 }
             if(ok == 0)
-                System.out.println("You haven't earned any discounts yet! \n");
+                System.out.println("\nYou haven't earned any discounts yet!");
             else {
-                System.out.println("Current discounts: ");
+                System.out.println("\nYour discounts: ");
                 for (int j = 0; j < librarian.getDiscounts().get(userId - 1).size(); j++)
                     if (!librarian.getDiscounts().get(userId - 1).get(j).getIsUsed()) {
                         librarian.getDiscounts().get(userId - 1).get(j).print();
@@ -184,7 +182,7 @@ public class UserService {
             }
         }
         else {
-            System.out.println("You haven't earned any discounts yet! \n");
+            System.out.println("\nYou haven't earned any discounts yet!");
         }
     }
 }

@@ -53,6 +53,14 @@ public class Books{
         isDeleted = deleted;
     }
 
+    public int getPartnerId() {
+        return partnerId;
+    }
+
+    public int getSectionId() {
+        return sectionId;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -67,7 +75,7 @@ public class Books{
     }
 
     public void print(){
-        System.out.println("book id: " + bookId);
+        System.out.println("book ID: " + bookId);
         System.out.println("    author: " + author);
         System.out.println("    title: " + title);
         System.out.println("    description: " + description);

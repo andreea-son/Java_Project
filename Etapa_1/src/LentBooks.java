@@ -95,5 +95,4 @@ public class LentBooks extends Books{
         if(super.getIsDeleted())
             System.out.println("    (the book was deleted)");
     }
-
 }

@@ -3,7 +3,6 @@ import java.util.LinkedList;
 import java.util.Scanner;
 import java.time.format.DateTimeFormatter;
 import java.time.LocalDateTime;
-import java.io.*;
 
 public class LibrarianService {
     private static ArrayList<Partners> partners = new ArrayList<>();
@@ -21,7 +20,6 @@ public class LibrarianService {
     private int sectionId = sections.size();
     private int userId = users.size();
     private int invoiceId = invoice.size();
-    private Console console = System.console();
     private Scanner myObj = new Scanner(System.in);
     private final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
 
@@ -98,23 +96,22 @@ public class LibrarianService {
 
     public void loginInformation() throws UsernameNotFoundException, IncorrectPasswordException{
         String librarianEmail;
+        String librarianPassword;
         actions.set(counter++, new MyAction("librarian: login", dtf.format(LocalDateTime.now())));
 
         lastDate.setDate(invoice.get(invoiceId - 1).getInvoiceDate().getDate());
 
-        System.out.println("Enter your username: ");
+        System.out.println("\nUsername: ");
         librarianEmail = myObj.nextLine();
         if (!librarianEmail.equals("admin")) {
-            throw new UsernameNotFoundException("Incorrect username! \n");
+            throw new UsernameNotFoundException("Incorrect username!");
         }
 
-        System.out.println("Enter your password: ");
-
-        char[] passwordChars = console.readPassword();
-        String librarianPassword = new String(passwordChars);
+        System.out.println("Password: ");
+        librarianPassword = myObj.nextLine();
 
         if (!librarianPassword.equals("admin")) {
-            throw new IncorrectPasswordException("Incorrect password! \n");
+            throw new IncorrectPasswordException("Incorrect password!");
         }
     }
 
@@ -124,16 +121,17 @@ public class LibrarianService {
 
         String sectionName;
 
-        System.out.println("Enter the name of the new section: ");
+        System.out.println("\nSection Name: ");
         sectionName = myObj.nextLine();
 
         if(sections.size() >= 1)
             for (Sections section : sections)
                 if (section.getSectionName().equals(sectionName) && !section.getIsDeleted()) {
-                    throw new AlreadyUsedNameException("This name has already been used for another section! \n");
+                    throw new AlreadyUsedNameException("This name has already been used for another section!");
                 }
 
         sections.add(new Sections(sectionId, sectionName, false));
+        System.out.println("Section added successfully!");
     }
 
     public void addNewPartner() throws AlreadyUsedEmailException, IncorrectMailFormatException{
@@ -144,27 +142,28 @@ public class LibrarianService {
         String partnerPassword;
         String partnerEmail;
 
-        System.out.println("Enter the name of the new partner: ");
+        System.out.println("\nPartner name: ");
         partnerName = myObj.nextLine();
 
-        System.out.println("Enter the email of the new partner in the following format: ");
+        System.out.println("Partner email, in the following format: ");
         System.out.println("Any uppercase/lowercase letter or digit or the special characters \"_\", \".\" and \"@\"");
         partnerEmail = myObj.nextLine();
 
         if (partners.size() >= 1)
             for (Partners partner : partners)
                 if (partner.getPartnerEmail().equals(partnerEmail) && !partner.getIsDeleted()) {
-                    throw new AlreadyUsedEmailException("This email has already been used for another partner! \n");
+                    throw new AlreadyUsedEmailException("This email has already been used for another partner!");
                 }
 
         if (!partnerEmail.matches("([a-z|A-Z|0-9|_|\\.]+)@([a-z|A-Z|0-9|_|\\.]+)[^\\.]\\.([a-z]+)")) {
-            throw new IncorrectMailFormatException("This email doesn't have the required format! \n");
+            throw new IncorrectMailFormatException("This email doesn't have the required format!");
         }
 
         String[] password = partnerEmail.split("@");
         partnerPassword = password[0];
 
         partners.add(new Partners(partnerId, 0, partnerName, partnerPassword, partnerEmail, false));
+        System.out.println("Partner added successfully!");
     }
 
     public void addNewUser() throws AlreadyUsedEmailException, IncorrectMailFormatException{
@@ -175,34 +174,29 @@ public class LibrarianService {
         String userEmail;
         String userPassword;
 
-        System.out.println("Enter the name of the new user: ");
+        System.out.println("\nUser name: ");
         userName = myObj.nextLine();
 
-        System.out.println("Enter the email of the new user in the following format: ");
+        System.out.println("User email, in the following format: ");
         System.out.println("Any uppercase/lowercase letter or digit or the special characters \"_\", \".\" and \"@\"");
         userEmail = myObj.nextLine();
 
         if(users.size() >= 1)
             for (Users user : users)
                 if (user.getUserEmail().equals(userEmail) && !user.getIsDeleted()) {
-                    throw new AlreadyUsedEmailException("This email has already been used! \n");
+                    throw new AlreadyUsedEmailException("This email has already been used!");
                 }
 
         if(!userEmail.matches("([a-z|A-Z|0-9|_|\\.]+)@([a-z|A-Z|0-9|_|\\.]+)[^\\.]\\.([a-z]+)")){
-            throw new IncorrectMailFormatException("This email doesn't have the required format! \n");
+            throw new IncorrectMailFormatException("This email doesn't have the required format!");
         }
 
         String[] password = userEmail.split("@");
         userPassword = password[0];
 
         users.add(new Users(userId, 0, userName, userPassword, userEmail, false));
+        System.out.println("User added successfully!");
     }
-
-    public void clearConsole(){
-        System.out.print("\033[H\033[2J");
-        System.out.flush();
-    }
-
     public void lendNewBook() throws BookNotFoundException, BookAlreadyLentException, UserNotFoundException, IncorrectDateFormatException, MaxNumOfDaysException, WrongInputException, InvalidCodeException, DateNotValidException{
         actions.set(counter++, new MyAction("librarian: lend new book", dtf.format(LocalDateTime.now())));
 
@@ -226,156 +220,179 @@ public class LibrarianService {
         int userId1;
         int bookId;
         int daysFromIssue;
+        int ok1 = 0;
         int ok2 = 0;
         int ok3 = 0;
         int ok4 = 0;
-
-        System.out.println("Enter the ID of the user that wants to lend the book: ");
-        userId1 = myObj.nextInt();
-        myObj.nextLine();
-
-        for (Users user : users)
-            if (userId1 == user.getUserId() && !user.getIsDeleted()) {
-                ok3 = 1;
-                break;
-            }
-
-        if (ok3 == 0)
-            throw new UserNotFoundException("Could not find user with this ID! \n");
-
-        System.out.println("Enter the ID of the book this user wants to lend: ");
-        bookId = myObj.nextInt();
-        myObj.nextLine();
+        int ok5 = 0;
 
         for (int i = 0; i < partners.size(); i++)
             for (int j = 0; j < partnerBooks.get(i).size(); j++)
-                if (bookId == partnerBooks.get(i).get(j).getBookId() && !partnerBooks.get(i).get(j).getIsDeleted()) {
+                if (partnerBooks.get(i).size() > 0)
+                    if (!partnerBooks.get(i).get(j).getIsDeleted()){
+                        ok1 = 1;
+                        break;
+                    }
+
+        if(users.size() == 0) {
+            System.out.println("\nThere are no users that could lend!");
+        }
+        else {
+            for (Users user : users)
+                if (!user.getIsDeleted()) {
                     ok2 = 1;
                     break;
                 }
+            if (ok2 == 0) {
+                System.out.println("\nThere are no users that could lend!");
+            } else if (ok1 == 0) {
+                System.out.println("\nThere are no books!");
+            } else {
+                System.out.println("\nUser ID: ");
+                userId1 = myObj.nextInt();
+                myObj.nextLine();
 
-        if (ok2 == 0)
-            throw new BookNotFoundException("Could not find book with this ID! \n");
+                for (Users user : users)
+                    if (userId1 == user.getUserId() && !user.getIsDeleted()) {
+                        ok3 = 1;
+                        break;
+                    }
 
-        for (int i = 0; i < partners.size(); i++)
-            for (int j = 0; j < partnerBooks.get(i).size(); j++)
-                if ((partnerBooks.get(i).get(j).getBookId() == bookId) && (partnerBooks.get(i).get(j).getIsLent())) {
-                    throw new BookAlreadyLentException("This book is not available for lending right now! \n");
+                if (ok3 == 0)
+                    throw new UserNotFoundException("Could not find user with this ID!");
+
+
+                System.out.println("Book ID: ");
+                bookId = myObj.nextInt();
+                myObj.nextLine();
+
+                for (int i = 0; i < partners.size(); i++)
+                    for (int j = 0; j < partnerBooks.get(i).size(); j++)
+                        if (bookId == partnerBooks.get(i).get(j).getBookId() && !partnerBooks.get(i).get(j).getIsDeleted()) {
+                            ok4 = 1;
+                            break;
+                        }
+
+                if (ok4 == 0)
+                    throw new BookNotFoundException("Could not find book with this ID!");
+
+                for (int i = 0; i < partners.size(); i++)
+                    for (int j = 0; j < partnerBooks.get(i).size(); j++)
+                        if ((partnerBooks.get(i).get(j).getBookId() == bookId) && (partnerBooks.get(i).get(j).getIsLent())) {
+                            throw new BookAlreadyLentException("This book is not available for lending right now!");
+                        }
+
+                System.out.println("Issue date (yyyy-MM-dd): ");
+                issuedDate = myObj.nextLine();
+
+                if (!issuedDate.matches("(((200)|(201))[0-9]|(202)[012])-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$")) {
+                    throw new IncorrectDateFormatException("This date doesn't match the requested date format!");
                 }
 
-        System.out.println("Enter issue date (yyyy-MM-dd): ");
-        issuedDate = myObj.nextLine();
+                tempDate.setDate(issuedDate);
 
-        if (!issuedDate.matches("(((200)|(201))[0-9]|(202)[012])-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$")) {
-            throw new IncorrectDateFormatException("This date doesn't match the requested date format! \n");
-        }
+                if (lastDate.isBiggerThan(tempDate))
+                    throw new DateNotValidException("Please enter a date equal to or grater than " + lastDate.getDate());
 
-        tempDate.setDate(issuedDate);
+                lastDate.setDate(issuedDate);
 
-        if (lastDate.isBiggerThan(tempDate))
-            throw new DateNotValidException("This date is not valid! Please enter a date that is equal to or grater than the last date that you have entered! \n");
+                System.out.println("Number of days to keep the book (< 60): ");
+                daysFromIssue = myObj.nextInt();
+                myObj.nextLine();
 
-        lastDate.setDate(issuedDate);
-
-        System.out.println("Enter how many days the user wants to keep the book (max 60 days): ");
-        daysFromIssue = myObj.nextInt();
-        myObj.nextLine();
-
-        if (daysFromIssue > 60) {
-            throw new MaxNumOfDaysException("Too many days! \n");
-        }
-
-        for (int i = 0; i < partners.size(); i++)
-            for (int j = 0; j < partnerBooks.get(i).size(); j++)
-                if (partnerBooks.get(i).get(j).getBookId() == bookId) {
-                    partnerBook = partnerBooks.get(i).get(j);
+                if (daysFromIssue > 60) {
+                    throw new MaxNumOfDaysException("Too many days!");
                 }
 
-        for (int i = 0; i < sections.size(); i++)
-            for (int j = 0; j < sectionBooks.get(i).size(); j++)
-                if (sectionBooks.get(i).get(j).getBookId() == bookId) {
-                    sectionBook = sectionBooks.get(i).get(j);
+                for (int i = 0; i < partners.size(); i++)
+                    for (int j = 0; j < partnerBooks.get(i).size(); j++)
+                        if (partnerBooks.get(i).get(j).getBookId() == bookId) {
+                            partnerBook = partnerBooks.get(i).get(j);
+                        }
+
+                for (int i = 0; i < sections.size(); i++)
+                    for (int j = 0; j < sectionBooks.get(i).size(); j++)
+                        if (sectionBooks.get(i).get(j).getBookId() == bookId) {
+                            sectionBook = sectionBooks.get(i).get(j);
+                        }
+
+                partnerBook.setIsLent(true);
+                sectionBook.setIsLent(true);
+
+                userName = users.get(userId1 - 1).getUserName();
+                userPassword = users.get(userId1 - 1).getUserPassword();
+                userEmail = users.get(userId1 - 1).getUserEmail();
+
+                userLentBooks.get(userId1 - 1).add(0, new LentBooks(bookId, false, partnerBook.getAuthor(), partnerBook.getTitle(), partnerBook.getDescription(), issuedDate, daysFromIssue, true, partnerBook.getSectionId(), partnerBook.getPartnerId(), userId1));
+
+                for (int i = 0; i < userLentBooks.get(userId1 - 1).size(); i++)
+                    if (userLentBooks.get(userId1 - 1).get(i).getBookId() == bookId && userLentBooks.get(userId1 - 1).get(i).getIsLent())
+                        userLentBook = userLentBooks.get(userId1 - 1).get(i);
+
+                System.out.print("\n");
+                System.out.print("The price: ");
+                System.out.printf("%.02f", userLentBook.getPrice());
+                System.out.print(" ron");
+                System.out.println("\n");
+
+                System.out.println("Discount code? (y/n)");
+                yOrN = myObj.nextLine();
+
+                if (!yOrN.equals("y") && !yOrN.equals("Y") && !yOrN.equals("n") && !yOrN.equals("N"))
+                    throw new WrongInputException("Invalid option!");
+
+                if (yOrN.equals("y") || yOrN.equals("Y")) {
+                    System.out.println("The code: ");
+                    discountCode = myObj.nextLine();
+                    for (int i = 0; i < discounts.get(userId1 - 1).size(); i++)
+                        if (discountCode.equals(discounts.get(userId1 - 1).get(i).getCode()) && !discounts.get(userId1 - 1).get(i).getIsUsed()) {
+                            ok5 = 1;
+                            discount = discounts.get(userId1 - 1).get(i);
+                            break;
+                        }
+
+                    if (ok5 == 0)
+                        throw new InvalidCodeException("This code doesn't exist on this user's discounts' list or it has already been used!");
+
+                    if (tempDate.isBiggerThan(discount.getExpirationDate())) {
+                        throw new InvalidCodeException("This code has already expired!");
+                    }
+                    float discountPrice = userLentBook.getPrice() - userLentBook.getPrice() / 10;
+
+                    System.out.print("\n");
+                    System.out.print("The price after discount: ");
+                    System.out.printf("%.02f", discountPrice);
+                    System.out.print(" ron");
+                    System.out.println("\n");
+
+                    discount.setIsUsed(true);
+
+                    System.out.println("Card or cash? (card/cash): ");
+                    cardOrCash = myObj.nextLine();
+
+                    if (!cardOrCash.equalsIgnoreCase("card") && !cardOrCash.equalsIgnoreCase("cash"))
+                        throw new WrongInputException("Invalid option!");
+
+                    numOfLogins = users.get(userId1 - 1).getNumOfLogins();
+                    users.set(userId1 - 1, new Users(userId1, numOfLogins, userName, userPassword, userEmail, false));
+                    invoice.add(new Invoice(++invoiceId, issuedDate, userId1, cardOrCash, true));
+                    System.out.println("\nThe invoice generated for the purchase:\n");
+                    invoice.get(invoiceId - 1).print();
+                    userLentBook.setPrice(discountPrice);
+                } else {
+                    System.out.println("Card or cash? (card/cash): ");
+                    cardOrCash = myObj.nextLine();
+
+                    if (!cardOrCash.equalsIgnoreCase("card") && !cardOrCash.equalsIgnoreCase("cash"))
+                        throw new WrongInputException("Invalid option!");
+
+                    numOfLogins = users.get(userId1 - 1).getNumOfLogins();
+                    users.set(userId1 - 1, new Users(userId1, numOfLogins, userName, userPassword, userEmail, false));
+                    invoice.add(new Invoice(++invoiceId, issuedDate, userId1, cardOrCash, false));
+                    System.out.println("\nThe invoice generated for the purchase:\n ");
+                    invoice.get(invoiceId - 1).print();
                 }
-
-        partnerBook.setIsLent(true);
-        sectionBook.setIsLent(true);
-
-        userName = users.get(userId1 - 1).getUserName();
-        userPassword = users.get(userId1 - 1).getUserPassword();
-        userEmail = users.get(userId1 - 1).getUserEmail();
-
-        userLentBooks.get(userId1 - 1).add(0, new LentBooks(bookId, false, partnerBook.getAuthor(), partnerBook.getTitle(), partnerBook.getDescription(), issuedDate, daysFromIssue, true, sectionBook.getBookId(), partnerBook.getBookId(), userId1));
-
-        for (int i = 0; i < userLentBooks.get(userId1 - 1).size(); i++)
-            if (userLentBooks.get(userId1 - 1).get(i).getBookId() == bookId && userLentBooks.get(userId1 - 1).get(i).getIsLent())
-                userLentBook = userLentBooks.get(userId1 - 1).get(i);
-
-        System.out.print("\n");
-        System.out.print("The price: ");
-        System.out.printf("%.02f", userLentBook.getPrice());
-        System.out.print(" ron");
-        System.out.println("\n");
-
-        System.out.println("Does this user have a discount code? (y/n)");
-        yOrN = myObj.nextLine();
-
-        if (!yOrN.equals("y") && !yOrN.equals("Y") && !yOrN.equals("n") && !yOrN.equals("N"))
-            throw new WrongInputException("You entered an invalid option! \n");
-
-        if (yOrN.equals("y") || yOrN.equals("Y")) {
-            System.out.println("Please enter the code: ");
-            discountCode = myObj.nextLine();
-            for (int i = 0; i < discounts.get(userId1 - 1).size(); i++)
-                if (discountCode.equals(discounts.get(userId1 - 1).get(i).getCode()) && !discounts.get(userId1 - 1).get(i).getIsUsed()) {
-                    ok4 = 1;
-                    discount = discounts.get(userId1 - 1).get(i);
-                    break;
-                }
-
-            if (ok4 == 0)
-                throw new InvalidCodeException("This code doesn't exist on this user's discounts' list or it has already been used! \n");
-
-            if (tempDate.isBiggerThan(discount.getExpirationDate())) {
-                throw new InvalidCodeException("This code has already expired! \n");
             }
-            float discountPrice = userLentBook.getPrice() - userLentBook.getPrice() / 10;
-
-            System.out.print("\n");
-            System.out.print("The price after discount: ");
-            System.out.printf("%.02f", discountPrice);
-            System.out.print(" ron");
-            System.out.println("\n");
-
-            discount.setIsUsed(true);
-
-            System.out.println("Paying with card or cash? (card/cash): ");
-            cardOrCash = myObj.nextLine();
-
-            if (!cardOrCash.equalsIgnoreCase("card") && !cardOrCash.equalsIgnoreCase("cash"))
-                throw new WrongInputException("You did not enter the right option! \n");
-
-            numOfLogins = users.get(userId1 - 1).getNumOfLogins();
-            users.set(userId1 - 1, new Users(userId1, numOfLogins, userName, userPassword, userEmail, false));
-            invoice.add(new Invoice(++invoiceId, issuedDate, userId1, cardOrCash, true));
-            clearConsole();
-            System.out.println("We generated an invoice for the purchase: ");
-            invoice.get(invoiceId - 1).print();
-            System.out.print("\n");
-            userLentBook.setPrice(discountPrice);
-        } else {
-            System.out.println("Paying with card or cash? (card/cash): ");
-            cardOrCash = myObj.nextLine();
-
-            if (!cardOrCash.equalsIgnoreCase("card") && !cardOrCash.equalsIgnoreCase("cash"))
-                throw new WrongInputException("You did not enter the right option! \n");
-
-            numOfLogins = users.get(userId1 - 1).getNumOfLogins();
-            users.set(userId1 - 1, new Users(userId1, numOfLogins, userName, userPassword, userEmail, false));
-            invoice.add(new Invoice(++invoiceId, issuedDate, userId1, cardOrCash, false));
-            clearConsole();
-            System.out.println("We generated an invoice for the purchase: ");
-            invoice.get(invoiceId - 1).print();
-            System.out.print("\n");
         }
     }
 
@@ -402,430 +419,444 @@ public class LibrarianService {
         String cardOrCash;
         int userId1;
         int bookId;
+        int ok1 = 0;
         int ok2 = 0;
         int ok3 = 0;
         int ok4 = 0;
         int ok5 = 0;
+        int ok6 = 0;
         long aux;
 
         LentBooks lentBook = new LentBooks();
         Books sectionBook = new Books();
         Books partnerBook = new Books();
 
-        System.out.println("Enter the ID of the user that wants to return the book: ");
-        userId1 = myObj.nextInt();
-        myObj.nextLine();
-
-        for (Users user : users)
-            if (userId1 == user.getUserId() && !user.getIsDeleted()) {
-                ok2 = 1;
-                break;
-            }
-
-        if(ok2 == 0)
-            throw new UserNotFoundException("Could not find user with this ID! \n");
-
-        for (int i = 0; i < userLentBooks.get(userId1 - 1).size(); i++)
-            if(userLentBooks.get(userId1 - 1).get(i).getIsLent()) {
-                ok3 = 1;
-                break;
-            }
-        if(ok3 == 0)
-            throw new NoLentBooksException("This user has no lent books at the moment! \n");
-
-        System.out.println("Enter the ID of the book this user wants to return: ");
-        bookId = myObj.nextInt();
-        myObj.nextLine();
-
-        for (int i = 0; i < partners.size(); i++)
-            for (int j = 0; j < partnerBooks.get(i).size(); j++) {
-                if (bookId == partnerBooks.get(i).get(j).getBookId() && !partnerBooks.get(i).get(j).getIsDeleted()) {
-                    ok4 = 1;
-                    partnerBook = partnerBooks.get(i).get(j);
+        for (int i = 0; i < users.size(); i++)
+            for (int j = 0; j < userLentBooks.get(i).size(); j++)
+                if (userLentBooks.get(i).get(j).getIsLent() && !userLentBooks.get(i).get(j).getIsDeleted()) {
+                    ok1 = 1;
                     break;
                 }
-            }
-
-        if (ok4 == 0)
-            throw new BookNotFoundException("Could not find book with this ID! \n");
-
-        for (int i = 0; i < sections.size(); i++)
-            for (int j = 0; j < sectionBooks.get(i).size(); j++)
-                if (bookId == sectionBooks.get(i).get(j).getBookId() && !sectionBooks.get(i).get(j).getIsDeleted()) {
-                    sectionBook = sectionBooks.get(i).get(j);
+        if(users.size() == 0) {
+            System.out.println("\nThere are no users that could return books!");
+        }
+        else {
+            for (Users user : users)
+                if (!user.getIsDeleted()) {
+                    ok2 = 1;
                     break;
                 }
+            if (ok2 == 0) {
+                System.out.println("\nThere are no users that could return books!");
+            } else if (ok1 == 0) {
+                System.out.println("\nThere are no lent books!");
+            } else {
+                System.out.println("\nUser ID: ");
+                userId1 = myObj.nextInt();
+                myObj.nextLine();
 
-        for (int i = 0; i < userLentBooks.get(userId1 - 1).size(); i++)
-            if (bookId == userLentBooks.get(userId1 - 1).get(i).getBookId() && userLentBooks.get(userId1 - 1).get(i).getIsLent()){
-                ok5 = 1;
-                lentBook = userLentBooks.get(userId1 - 1).get(i);
-                break;
+                for (Users user : users)
+                    if (userId1 == user.getUserId() && !user.getIsDeleted()) {
+                        ok3 = 1;
+                        break;
+                    }
+
+                if (ok3 == 0)
+                    throw new UserNotFoundException("Could not find user with this ID!");
+
+                for (int i = 0; i < userLentBooks.get(userId1 - 1).size(); i++)
+                    if (userLentBooks.get(userId1 - 1).get(i).getIsLent()) {
+                        ok4 = 1;
+                        break;
+                    }
+                if (ok4 == 0)
+                    throw new NoLentBooksException("This user has no lent books at the moment!");
+
+                System.out.println("Book ID: ");
+                bookId = myObj.nextInt();
+                myObj.nextLine();
+
+                for (int i = 0; i < partners.size(); i++)
+                    for (int j = 0; j < partnerBooks.get(i).size(); j++) {
+                        if (bookId == partnerBooks.get(i).get(j).getBookId() && !partnerBooks.get(i).get(j).getIsDeleted()) {
+                            ok5 = 1;
+                            partnerBook = partnerBooks.get(i).get(j);
+                            break;
+                        }
+                    }
+
+                if (ok5 == 0)
+                    throw new BookNotFoundException("Could not find book with this ID!");
+
+                for (int i = 0; i < sections.size(); i++)
+                    for (int j = 0; j < sectionBooks.get(i).size(); j++)
+                        if (bookId == sectionBooks.get(i).get(j).getBookId() && !sectionBooks.get(i).get(j).getIsDeleted()) {
+                            sectionBook = sectionBooks.get(i).get(j);
+                            break;
+                        }
+
+                for (int i = 0; i < userLentBooks.get(userId1 - 1).size(); i++)
+                    if (bookId == userLentBooks.get(userId1 - 1).get(i).getBookId() && userLentBooks.get(userId1 - 1).get(i).getIsLent()) {
+                        ok6 = 1;
+                        lentBook = userLentBooks.get(userId1 - 1).get(i);
+                        break;
+                    }
+
+                if (ok6 == 0)
+                    throw new BookNotLentException("This book is not on the current lent book list of the user! You can't return it!");
+
+                System.out.println("Current date (yyyy-MM-dd): ");
+                tempDate = myObj.nextLine();
+                actualReturnDate.setDate(tempDate);
+
+                if (!actualReturnDate.getDate().matches("(((200)|(201))[0-9]|(202)[012])-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$")) {
+                    throw new IncorrectDateFormatException("This date doesn't match the requested date format!");
+                }
+
+                if (lastDate.isBiggerThan(actualReturnDate))
+                    throw new DateNotValidException("Please enter a date equal to or grater than " + lastDate.getDate());
+                lastDate.setDate(tempDate);
+
+                partnerBook.setIsLent(false);
+                sectionBook.setIsLent(false);
+                lentBook.setIsLent(false);
+
+                lentBook.setExceededDays1(lentBook.getReturnDate().differenceInDays(actualReturnDate));
+                lentBook.setExceededPrice1(3 * lentBook.getExceededDays());
+
+                if (lentBook.getExceededDays() > 0) {
+                    System.out.print("\n");
+                    System.out.println("The user exceeded the return date with " + lentBook.getExceededDays() + " days!");
+                    System.out.print("They have to pay an additional price: ");
+                    System.out.printf("%.02f", lentBook.getExceededPrice());
+                    System.out.print(" ron");
+                    System.out.println("\n");
+                    System.out.println("Card or cash? (card/cash): ");
+                    cardOrCash = myObj.nextLine();
+
+                    if (!cardOrCash.equalsIgnoreCase("card") && !cardOrCash.equalsIgnoreCase("cash"))
+                        throw new WrongInputException("Invalid option!");
+
+                    invoice.add(new Invoice(++invoiceId, actualReturnDate.getDate(), userId1, cardOrCash, false));
+                    System.out.println("\nThe invoice generated for the purchase:\n ");
+                    invoice.get(invoiceId - 1).print();
+                } else if (lentBook.getExceededDays() < 0) {
+                    lentBook.setReturnDate(actualReturnDate.getDate());
+                    System.out.println("\nWhat a fast reader! We generated a 10% discount code for future purchases! ");
+                    discounts.get(userId1 - 1).add(new _10PercentDiscount(getAlphaNumericString(12), actualReturnDate.addMonths(2).getDate(), userId1, false));
+                    int index = discounts.get(userId1 - 1).size() - 1;
+                    System.out.print("\n");
+                    System.out.print("Code: " + discounts.get(userId1 - 1).get(index).getCode() + ", expiration date: ");
+                    discounts.get(userId1 - 1).get(index).getExpirationDate().print();
+                    System.out.print("\n");
+                }
             }
-
-        if (ok5 == 0)
-            throw new BookNotLentException("This book is not on the current lent book list of the user! You can't return it!\n");
-
-        System.out.println("Enter current date (yyyy-MM-dd): ");
-        tempDate = myObj.nextLine();
-        actualReturnDate.setDate(tempDate);
-
-        if (!actualReturnDate.getDate().matches("(((200)|(201))[0-9]|(202)[012])-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$")) {
-            throw new IncorrectDateFormatException("This date doesn't match the requested date format! \n");
-        }
-
-        if(lastDate.isBiggerThan(actualReturnDate))
-            throw new DateNotValidException("This date is not valid! Please enter a date that is equal to or grater than the last date that you have entered! \n");
-        lastDate.setDate(tempDate);
-
-        aux = lentBook.getIssuedDate().differenceInDays(actualReturnDate);
-
-        if(aux < 0)
-            throw new DateNotValidException("The date you entered is not valid! Please enter a date equal to or grater than the issue date! \n");
-
-        partnerBook.setIsLent(false);
-        sectionBook.setIsLent(false);
-        lentBook.setIsLent(false);
-
-        lentBook.setExceededDays1(lentBook.getReturnDate().differenceInDays(actualReturnDate));
-        lentBook.setExceededPrice1(3 * lentBook.getExceededDays());
-
-        if(lentBook.getExceededDays() > 0) {
-            System.out.print("\n");
-            System.out.println("The user exceeded the return date with " + lentBook.getExceededDays() + " days!");
-            System.out.print("They have to pay an additional price: ");
-            System.out.printf("%.02f", lentBook.getExceededPrice());
-            System.out.print(" ron");
-            System.out.println("\n");
-            System.out.println("Paying with card or cash? (card/cash): ");
-            cardOrCash = myObj.nextLine();
-
-            if(!cardOrCash.equalsIgnoreCase("card") && !cardOrCash.equalsIgnoreCase("cash"))
-                throw new WrongInputException("You did not enter the right option! \n");
-
-            invoice.add(new Invoice(++invoiceId, actualReturnDate.getDate(), userId1, cardOrCash, false));
-            clearConsole();
-            System.out.println("We generated an invoice for the purchase: ");
-            invoice.get(invoiceId - 1).print();
-            System.out.print("\n");
-        }
-        else if(lentBook.getExceededDays() < 0){
-            lentBook.setReturnDate(actualReturnDate.getDate());
-            System.out.println("\nWhat a fast reader! We generated a 10% discount code for future purchases! ");
-            discounts.get(userId1 - 1).add(new _10PercentDiscount(getAlphaNumericString(12), actualReturnDate.addMonths(2).getDate(), userId1, false));
-            int index = discounts.get(userId1 - 1).size() - 1;
-            System.out.println("The code: " + discounts.get(userId1 - 1).get(index).getCode());
-            System.out.print("The expiration date: ");
-            discounts.get(userId1 - 1).get(index).getExpirationDate().print();
-            System.out.print(" (2 months from now)\n\n");
         }
     }
 
     public void printPartners(){
         actions.set(counter++, new MyAction("librarian: print partners", dtf.format(LocalDateTime.now())));
-
         int ok = 0;
 
-        if(partners.size() > 0) {
-            for (Partners partner : partners)
-                if(!partner.getIsDeleted()) {
-                    ok = 1;
-                    break;
-                }
-            if(ok == 0)
-                System.out.println("There are no partners! \n");
-            else {
-                System.out.println("The partners added in the system: ");
-                for (Partners partner : partners)
-                    if(!partner.getIsDeleted()) {
-                        partner.print();
-                        System.out.print("\n");
-                    }
-            }
-        }
-        else{
-            System.out.println("There are no partners! \n");
-        }
-    }
-
-    public void printPartnerBooks() throws PartnerNotFoundException{
-        actions.set(counter++,new MyAction("librarian: print partner books", dtf.format(LocalDateTime.now())));
-
-        int ok = 0;
-
-        if(partners.size() > 0) {
+        if (partners.size() > 0) {
             for (Partners partner : partners)
                 if (!partner.getIsDeleted()) {
                     ok = 1;
                     break;
                 }
             if (ok == 0)
-                System.out.println("There are no partners! \n");
+                System.out.println("\nThere are no partners!");
             else {
-                int partnerId1;
-                int ok1 = 0;
-                int ok2 = 0;
-                System.out.println("Enter the ID of the partner: ");
+                System.out.println("\nPartners:\n");
+                for (int i = 0; i < partners.size() - 1; i++)
+                    if (!partners.get(i).getIsDeleted()) {
+                        partners.get(i).print();
+                        System.out.print("\n");
+                    }
+                partners.get(partners.size() - 1).print();
+            }
+        } else {
+            System.out.println("\nThere are no partners!");
+        }
+    }
+
+    public void printPartnerBooks() throws PartnerNotFoundException{
+        actions.set(counter++,new MyAction("librarian: print partner books", dtf.format(LocalDateTime.now())));
+
+        int partnerId1;
+        int ok1 = 0;
+        int ok2 = 0;
+        int ok3 = 0;
+
+        if (partners.size() > 0) {
+            for (Partners partner : partners)
+                if (!partner.getIsDeleted()) {
+                    ok1 = 1;
+                    break;
+                }
+            if (ok1 == 0)
+                System.out.println("\nThere are no partners!");
+            else {
+
+                System.out.println("\nPartner ID:");
                 partnerId1 = myObj.nextInt();
                 myObj.nextLine();
                 for (Partners partner : partners)
                     if (partnerId1 == partner.getPartnerId() && !partner.getIsDeleted()) {
-                        ok1 = 1;
+                        ok2 = 1;
                         break;
                     }
-                if (ok1 == 0)
-                    throw new PartnerNotFoundException("Could not find partner with this ID! \n");
+                if (ok2 == 0)
+                    throw new PartnerNotFoundException("Could not find partner with this ID!");
                 if (partnerBooks.get(partnerId1 - 1).size() > 0) {
                     for (int j = 0; j < partnerBooks.get(partnerId1 - 1).size(); j++)
                         if (!partnerBooks.get(partnerId1 - 1).get(j).getIsDeleted()) {
-                            ok2 = 1;
+                            ok3 = 1;
                             break;
                         }
-                    if (ok2 == 0)
-                        System.out.println("There are no books added by this partner! \n");
+                    if (ok3 == 0)
+                        System.out.println("There are no books added by this partner!");
                     else {
-                        System.out.println("This partner's books: ");
-                        for (int j = 0; j < partnerBooks.get(partnerId1 - 1).size(); j++)
+                        System.out.println("This partner's books:\n");
+                        for (int j = 0; j < partnerBooks.get(partnerId1 - 1).size() - 1; j++)
                             if (!partnerBooks.get(partnerId1 - 1).get(j).getIsDeleted()) {
                                 partnerBooks.get(partnerId1 - 1).get(j).print();
                                 System.out.print("\n");
                             }
+                        partnerBooks.get(partnerId1 - 1).get(partnerBooks.get(partnerId1 - 1).size() - 1).print();
                     }
                 } else {
-                    System.out.println("There are no books added by this partner! \n");
+                    System.out.println("There are no books added by this partner!");
                 }
             }
-        }
-        else{
-            System.out.println("There are no partners! \n");
+        } else {
+            System.out.println("\nThere are no partners!");
         }
     }
 
     public void printSections(){
         actions.set(counter++, new MyAction("librarian: print sections", dtf.format(LocalDateTime.now())));
-
         int ok = 0;
 
-        if(sections.size() > 0) {
+        if (sections.size() > 0) {
             for (Sections section : sections)
-                if(!section.getIsDeleted()){
+                if (!section.getIsDeleted()) {
                     ok = 1;
                     break;
                 }
             if (ok == 0)
-                System.out.println("There are no sections! \n");
+                System.out.println("\nThere are no sections!");
             else {
-                System.out.println("The sections added in the system: ");
-                for (Sections section : sections)
-                    if(!section.getIsDeleted()){
-                        section.print();
+                System.out.println("\nSections:\n");
+                for (int i = 0; i < sections.size() - 1; i++)
+                    if (!sections.get(i).getIsDeleted()) {
+                        sections.get(i).print();
                         System.out.print("\n");
                     }
+                sections.get(sections.size() - 1).print();
             }
-        }
-        else{
-            System.out.println("There are no sections! \n");
+        } else {
+            System.out.println("\nThere are no sections!");
         }
     }
 
     public void printSectionBooks() throws SectionNotFoundException{
         actions.set(counter++,new MyAction("librarian: print section books", dtf.format(LocalDateTime.now())));
+        int sectionId1;
+        int ok1 = 0;
+        int ok2 = 0;
+        int ok3 = 0;
 
-        int ok = 0;
-
-        if(sections.size() > 0) {
+        if (sections.size() > 0) {
             for (Sections section : sections)
-                if(!section.getIsDeleted()){
-                    ok = 1;
+                if (!section.getIsDeleted()) {
+                    ok1 = 1;
                     break;
                 }
-            if (ok == 0)
-                System.out.println("There are no sections! \n");
-            else{
-                    int sectionId1;
-                    int ok1 = 0;
-                    int ok2 = 0;
-                    System.out.println("Enter the ID of the section: ");
-                    sectionId1 = myObj.nextInt();
-                    myObj.nextLine();
-                    for (Sections section : sections)
-                        if (sectionId1 == section.getSectionId() && !section.getIsDeleted()) {
-                            ok1 = 1;
+            if (ok1 == 0)
+                System.out.println("\nThere are no sections!");
+            else {
+
+                System.out.println("\nSection ID:");
+                sectionId1 = myObj.nextInt();
+                myObj.nextLine();
+                for (Sections section : sections)
+                    if (sectionId1 == section.getSectionId() && !section.getIsDeleted()) {
+                        ok2 = 1;
+                        break;
+                    }
+                if (ok2 == 0)
+                    throw new SectionNotFoundException("Could not find section with this ID!");
+                if (sectionBooks.get(sectionId1 - 1).size() > 0) {
+                    for (int j = 0; j < sectionBooks.get(sectionId1 - 1).size(); j++)
+                        if (!sectionBooks.get(sectionId1 - 1).get(j).getIsDeleted()) {
+                            ok3 = 1;
                             break;
                         }
-                    if (ok1 == 0)
-                        throw new SectionNotFoundException("Could not find section with this ID! \n");
-                    if (sectionBooks.get(sectionId1 - 1).size() > 0) {
-                        for (int j = 0; j < sectionBooks.get(sectionId1 - 1).size(); j++)
+                    if (ok3 == 0)
+                        System.out.println("There are no books in this section!");
+                    else {
+                        System.out.println("This section's books:\n");
+                        for (int j = 0; j < sectionBooks.get(sectionId1 - 1).size() - 1; j++)
                             if (!sectionBooks.get(sectionId1 - 1).get(j).getIsDeleted()) {
-                                ok2 = 1;
-                                break;
+                                sectionBooks.get(sectionId1 - 1).get(j).print();
+                                System.out.print("\n");
                             }
-                        if (ok2 == 0)
-                            System.out.println("There are no books in this section! \n");
-                        else {
-                            System.out.println("This section's books: ");
-                            for (int j = 0; j < sectionBooks.get(sectionId1 - 1).size(); j++)
-                                if (!sectionBooks.get(sectionId1 - 1).get(j).getIsDeleted()) {
-                                    sectionBooks.get(sectionId1 - 1).get(j).print();
-                                    System.out.print("\n");
-                                }
-                        }
-                    } else {
-                        System.out.println("There are no books in this section! \n");
+                        sectionBooks.get(sectionId1 - 1).get(sectionBooks.get(sectionId1 - 1).size() - 1).print();
                     }
+                } else {
+                    System.out.println("There are no books in this section!");
                 }
-        }
-        else{
-            System.out.println("There are no sections! \n");
+            }
+        } else {
+            System.out.println("\nThere are no sections!");
         }
     }
 
     public void printUsers(){
         actions.set(counter++, new MyAction("librarian: print users", dtf.format(LocalDateTime.now())));
-
         int ok = 0;
 
-        if(users.size() > 0) {
+        if (users.size() > 0) {
             for (Users user : users)
-                if(!user.getIsDeleted()){
+                if (!user.getIsDeleted()) {
                     ok = 1;
                     break;
                 }
-            if(ok == 0)
-                System.out.println("There are no users! \n");
+            if (ok == 0)
+                System.out.println("\nThere are no users!");
             else {
-                System.out.println("The users added in the system: ");
-                for (Users user : users)
-                    if(!user.getIsDeleted()) {
-                        user.print();
+                System.out.println("\nUsers:\n");
+                for (int i = 0; i < users.size() - 1; i++)
+                    if (!users.get(i).getIsDeleted()) {
+                        users.get(i).print();
                         System.out.print("\n");
                     }
+                users.get(users.size() - 1).print();
             }
-        }
-        else {
-            System.out.println("There are no users! \n");
+        } else {
+            System.out.println("\nThere are no users!");
         }
     }
 
     public void printUserLentBooks() throws UserNotFoundException{
         actions.set(counter++, new MyAction("librarian: print user lent books", dtf.format(LocalDateTime.now())));
+        int userId1;
+        int ok1 = 0;
+        int ok2 = 0;
+        int ok3 = 0;
 
-        int ok = 0;
-
-        if(users.size() > 0) {
+        if (users.size() > 0) {
             for (Users user : users)
                 if (!user.getIsDeleted()) {
-                    ok = 1;
+                    ok1 = 1;
                     break;
                 }
-            if (ok == 0)
-                System.out.println("There are no users! \n");
+            if (ok1 == 0)
+                System.out.println("\nThere are no users!");
             else {
-                int userId1;
-                int ok1 = 0;
-                int ok2 = 0;
-                System.out.println("Enter the ID of the user: ");
+
+                System.out.println("\nUser ID:");
                 userId1 = myObj.nextInt();
                 myObj.nextLine();
                 for (Users user : users)
                     if (userId1 == user.getUserId() && !user.getIsDeleted()) {
-                        ok1 = 1;
+                        ok2 = 1;
                         break;
                     }
-                if (ok1 == 0)
-                    throw new UserNotFoundException("Could not find user with this ID! \n");
+                if (ok2 == 0)
+                    throw new UserNotFoundException("Could not find user with this ID!");
                 if (userLentBooks.get(userId1 - 1).size() > 0) {
                     for (int j = 0; j < userLentBooks.get(userId1 - 1).size(); j++)
                         if (userLentBooks.get(userId1 - 1).get(j).getIsLent()) {
-                            ok2 = 1;
+                            ok3 = 1;
                             break;
                         }
-                    if (ok2 == 0)
-                        System.out.println("There are currently no books lent by this user! \n");
+                    if (ok3 == 0)
+                        System.out.println("There are currently no books lent by this user!");
                     else {
-                        System.out.println("Currently lent books: ");
-                        for (int j = 0; j < userLentBooks.get(userId1 - 1).size(); j++)
+                        System.out.println("This user's lent books:\n");
+                        for (int j = 0; j < userLentBooks.get(userId1 - 1).size() - 1; j++)
                             if (userLentBooks.get(userId1 - 1).get(j).getIsLent()) {
                                 userLentBooks.get(userId1 - 1).get(j).print();
                                 System.out.print("\n");
                             }
+                        userLentBooks.get(userId1 - 1).get(userLentBooks.get(userId1 - 1).size() - 1).print();
                     }
                 } else {
-                    System.out.println("There are currently no books lent by this user! \n");
+                    System.out.println("There are currently no books lent by this user!");
                 }
             }
-        }
-        else{
-            System.out.println("There are no users! \n");
+        } else {
+            System.out.println("\nThere are no users!");
         }
     }
 
     public void printUserReturnedBooks() throws UserNotFoundException{
         actions.set(counter++, new MyAction("librarian: print user returned books", dtf.format(LocalDateTime.now())));
+        int userId1;
+        int ok1 = 0;
+        int ok2 = 0;
+        int ok3 = 0;
 
-        int ok = 0;
-
-        if(users.size() > 0) {
+        if (users.size() > 0) {
             for (Users user : users)
                 if (!user.getIsDeleted()) {
-                    ok = 1;
+                    ok1 = 1;
                     break;
                 }
-            if (ok == 0)
-                System.out.println("There are no users! \n");
+            if (ok1 == 0)
+                System.out.println("\nThere are no users!");
             else {
-                int userId1;
-                int ok1 = 0;
-                int ok2 = 0;
-                System.out.println("Enter the ID of the user: ");
+
+                System.out.println("\nUser ID: ");
                 userId1 = myObj.nextInt();
                 myObj.nextLine();
                 for (Users user : users)
                     if (userId1 == user.getUserId() && !user.getIsDeleted()) {
-                        ok1 = 1;
+                        ok2 = 1;
                         break;
                     }
-                if (ok1 == 0)
-                    throw new UserNotFoundException("Could not find user with this ID! \n");
+                if (ok2 == 0)
+                    throw new UserNotFoundException("Could not find user with this ID!");
                 if (userLentBooks.get(userId1 - 1).size() > 0) {
                     for (int j = 0; j < userLentBooks.get(userId1 - 1).size(); j++)
                         if (!userLentBooks.get(userId1 - 1).get(j).getIsLent()) {
-                            ok2 = 1;
+                            ok3 = 1;
                             break;
                         }
-                    if (ok2 == 0)
-                        System.out.println("There are no books returned by this user! \n");
+                    if (ok3 == 0)
+                        System.out.println("There are no books returned by this user!");
                     else {
-                        System.out.println("Returned books: ");
-                        for (int j = 0; j < userLentBooks.get(userId1 - 1).size(); j++)
+                        System.out.println("This user's returned books:\n");
+                        for (int j = 0; j < userLentBooks.get(userId1 - 1).size() - 1; j++)
                             if (!userLentBooks.get(userId1 - 1).get(j).getIsLent()) {
                                 userLentBooks.get(userId1 - 1).get(j).print();
                                 System.out.print("\n");
                             }
+                        userLentBooks.get(userId1 - 1).get(userLentBooks.get(userId1 - 1).size() - 1).print();
                     }
                 } else {
-                    System.out.println("There are no books returned by this user! \n");
+                    System.out.println("There are no books returned by this user!");
                 }
             }
-        }
-        else{
-            System.out.println("There are no users! \n");
+        } else {
+            System.out.println("\nThere are no users!");
         }
     }
 
     public void printIssuedBooks(){
         actions.set(counter++, new MyAction("librarian: print all issued books", dtf.format(LocalDateTime.now())));
-
         int ok1 = 0;
         int ok2 = 0;
+
         for (int i = 0; i < users.size(); i++)
             if (userLentBooks.get(i).size() > 0) {
                 ok1 = 1;
                 break;
             }
-        if(ok1 == 0)
-            System.out.println("There are no issued books! \n");
+        if (ok1 == 0)
+            System.out.println("\nThere are no issued books!");
         else {
             for (int i = 0; i < users.size(); i++)
                 for (int j = 0; j < userLentBooks.get(i).size(); j++)
@@ -834,33 +865,36 @@ public class LibrarianService {
                         break;
                     }
             if (ok2 == 0)
-                System.out.println("There are no issued books! \n");
+                System.out.println("\nThere are no issued books!");
             else {
-                System.out.println("The issued books: ");
-                for (int i = 0; i < users.size(); i++)
-                    for (int j = 0; j < userLentBooks.get(i).size(); j++)
-                        if (userLentBooks.get(i).get(j).getIsLent()) {
-                            userLentBooks.get(i).get(j).print();
-                            System.out.println("The user that lent this book: ");
-                            users.get(i).print();
-                            System.out.print("\n");
-                        }
+                System.out.println("\nIssued books:\n");
+                for (int i = 0; i < users.size(); i++) {
+                    if(userLentBooks.get(i).size() >= 1) {
+                        for (int j = 0; j < userLentBooks.get(i).size(); j++)
+                            if (userLentBooks.get(i).get(j).getIsLent()) {
+                                userLentBooks.get(i).get(j).print();
+                                System.out.println("The user that lent this book: ");
+                                users.get(i).print();
+                                System.out.print("\n");
+                            }
+                    }
+                }
             }
         }
     }
 
     public void printBooks(){
         actions.set(counter++, new MyAction("librarian: print all available books", dtf.format(LocalDateTime.now())));
-
         int ok1 = 0;
         int ok2 = 0;
+
         for (int i = 0; i < partners.size(); i++)
             if (partnerBooks.get(i).size() > 0) {
                 ok1 = 1;
                 break;
             }
         if (ok1 == 0)
-            System.out.println("There are no books! \n");
+            System.out.println("\nThere are no books!");
         else {
             for (int i = 0; i < partners.size(); i++)
                 for (int j = 0; j < partnerBooks.get(i).size(); j++)
@@ -869,252 +903,322 @@ public class LibrarianService {
                         break;
                     }
             if (ok2 == 0)
-                System.out.println("There are no available books! \n");
+                System.out.println("\nThere are no available books!");
             else {
-                System.out.println("The books in the library: ");
-                for (int i = 0; i < partners.size(); i++)
+                System.out.println("\nAvailable books:\n");
+                for (int i = 0; i < partners.size(); i++) {
                     for (int j = 0; j < partnerBooks.get(i).size(); j++)
                         if (!partnerBooks.get(i).get(j).getIsLent() && !partnerBooks.get(i).get(j).getIsDeleted()) {
                             partnerBooks.get(i).get(j).print();
                             System.out.print("\n");
                         }
+                }
             }
         }
     }
 
     public void printUserDiscounts() throws UserNotFoundException{
         actions.set(counter++, new MyAction("librarian: print user discounts", dtf.format(LocalDateTime.now())));
+        int ok1 = 0;
+        int ok2 = 0;
+        int ok3 = 0;
+        int userId1;
 
-        int ok = 0;
-
-        if(users.size() > 0) {
+        if (users.size() > 0) {
             for (Users user : users)
                 if (!user.getIsDeleted()) {
-                    ok = 1;
+                    ok1 = 1;
                     break;
                 }
-            if (ok == 0)
-                System.out.println("There are no users! \n");
+            if (ok1 == 0)
+                System.out.println("\nThere are no users!");
             else {
-                int userId1;
-                int ok1 = 0;
-                int ok2 = 0;
-                System.out.println("Enter the ID of the user: ");
+                System.out.println("\nUser ID: ");
                 userId1 = myObj.nextInt();
                 myObj.nextLine();
                 for (Users user : users)
                     if (userId1 == user.getUserId() && !user.getIsDeleted()) {
-                        ok1 = 1;
+                        ok2 = 1;
                         break;
                     }
-                if (ok1 == 0)
-                    throw new UserNotFoundException("Could not find user with this ID! \n");
+                if (ok2 == 0)
+                    throw new UserNotFoundException("Could not find user with this ID!");
                 if (discounts.get(userId1 - 1).size() > 0) {
                     for (int j = 0; j < discounts.get(userId1 - 1).size(); j++)
                         if (!discounts.get(userId1 - 1).get(j).getIsUsed()) {
                             if (lastDate.isBiggerThan(discounts.get(userId1 - 1).get(j).getExpirationDate()))
                                 discounts.get(userId1 - 1).get(j).setIsUsed(true);
                             else {
-                                ok2 = 1;
+                                ok3 = 1;
                             }
                         }
-                    if (ok2 == 0)
-                        System.out.println("This user hasn't earned any discounts yet! \n");
+                    if (ok3 == 0)
+                        System.out.println("This user hasn't earned any discounts yet!");
                     else {
-                        System.out.println("Current discounts: ");
-                        for (int j = 0; j < discounts.get(userId1 - 1).size(); j++)
+                        System.out.println("This user's discounts: ");
+                        for (int j = 0; j < discounts.get(userId1 - 1).size() - 1; j++)
                             if (!discounts.get(userId1 - 1).get(j).getIsUsed()) {
                                 discounts.get(userId1 - 1).get(j).print();
                                 System.out.print("\n");
                             }
+                        discounts.get(userId1 - 1).get(discounts.get(userId1 - 1).size() - 1).print();
                     }
                 } else {
-                    System.out.println("This user hasn't earned any discounts yet! \n");
+                    System.out.println("This user hasn't earned any discounts yet!");
                 }
             }
-        }
-        else{
-            System.out.println("There are no users! \n");
+        } else {
+            System.out.println("\nThere are no users!");
         }
     }
 
     public void deleteBook() throws BookNotFoundException, BookCurrentlyLentException{
         actions.set(counter++, new MyAction("librarian: delete book", dtf.format(LocalDateTime.now())));
-
         int bookId;
+        int ok1 = 0;
+        int ok2 = 0;
         int ok3 = 0;
         int ok4 = 0;
 
-        System.out.println("Enter the ID of the book you want to delete: ");
-        bookId = myObj.nextInt();
-        myObj.nextLine();
         for (int i = 0; i < partners.size(); i++)
-            for (int j = 0; j < partnerBooks.get(i).size(); j++)
-                if (bookId == partnerBooks.get(i).get(j).getBookId() && !partnerBooks.get(i).get(j).getIsDeleted()) {
-                    ok3 = 1;
-                    break;
-                }
-        if (ok3 == 0)
-            throw new BookNotFoundException("Could not find book with this ID! \n");
+            if (partnerBooks.get(i).size() > 0) {
+                ok1 = 1;
+                break;
+            }
+        if (ok1 == 0) {
+            System.out.println("\nThere are no books!");
+        }
+        else {
+            for (int i = 0; i < partners.size(); i++)
+                for (int j = 0; j < partnerBooks.get(i).size(); j++)
+                    if (!partnerBooks.get(i).get(j).getIsLent() && !partnerBooks.get(i).get(j).getIsDeleted()) {
+                        ok2 = 1;
+                        break;
+                    }
+            if (ok2 == 0) {
+                System.out.println("\nThere are no books!");
+            } else {
+                System.out.println("\nBook ID:");
+                bookId = myObj.nextInt();
+                myObj.nextLine();
+                for (int i = 0; i < partners.size(); i++)
+                    for (int j = 0; j < partnerBooks.get(i).size(); j++)
+                        if (bookId == partnerBooks.get(i).get(j).getBookId() && !partnerBooks.get(i).get(j).getIsDeleted()) {
+                            ok3 = 1;
+                            break;
+                        }
+                if (ok3 == 0)
+                    throw new BookNotFoundException("Could not find book with this ID!");
 
-        for (int i = 0; i < users.size(); i++)
-            for (int j = 0; j < userLentBooks.get(i).size(); j++)
-                if (bookId == userLentBooks.get(i).get(j).getBookId() && userLentBooks.get(i).get(j).getIsLent()) {
-                    ok4 = 1;
-                    break;
-                }
+                for (int i = 0; i < users.size(); i++)
+                    for (int j = 0; j < userLentBooks.get(i).size(); j++)
+                        if (bookId == userLentBooks.get(i).get(j).getBookId() && userLentBooks.get(i).get(j).getIsLent()) {
+                            ok4 = 1;
+                            break;
+                        }
 
-        if (ok4 == 1)
-            throw new BookCurrentlyLentException("This book is currently on the lent books' list. You can't remove it!\n");
+                if (ok4 == 1)
+                    throw new BookCurrentlyLentException("This book is currently on the lent books' list. You can't remove it!");
 
-        for (int i = 0; i < users.size(); i++)
-            for (int j = 0; j < userLentBooks.get(i).size(); j++)
-                if (bookId == userLentBooks.get(i).get(j).getBookId()) {
-                    userLentBooks.get(i).get(j).setIsDeleted(true);
-                }
+                for (int i = 0; i < users.size(); i++)
+                    for (int j = 0; j < userLentBooks.get(i).size(); j++)
+                        if (bookId == userLentBooks.get(i).get(j).getBookId()) {
+                            userLentBooks.get(i).get(j).setIsDeleted(true);
+                        }
 
-        for (int i = 0; i < partners.size(); i++)
-            for (int j = 0; j < partnerBooks.get(i).size(); j++)
-                if (bookId == partnerBooks.get(i).get(j).getBookId()) {
-                    partnerBooks.get(i).get(j).setIsDeleted(true);
-                }
+                for (int i = 0; i < partners.size(); i++)
+                    for (int j = 0; j < partnerBooks.get(i).size(); j++)
+                        if (bookId == partnerBooks.get(i).get(j).getBookId()) {
+                            partnerBooks.get(i).get(j).setIsDeleted(true);
+                        }
 
-        for (int i = 0; i < sections.size(); i++)
-            for (int j = 0; j < sectionBooks.get(i).size(); j++)
-                if (bookId == sectionBooks.get(i).get(j).getBookId()) {
-                    sectionBooks.get(i).get(j).setIsDeleted(true);
-                }
+                for (int i = 0; i < sections.size(); i++)
+                    for (int j = 0; j < sectionBooks.get(i).size(); j++)
+                        if (bookId == sectionBooks.get(i).get(j).getBookId()) {
+                            sectionBooks.get(i).get(j).setIsDeleted(true);
+                        }
+                System.out.println("Book deleted successfully!");
+            }
+        }
     }
 
     public void deleteSections() throws SectionNotFoundException, BookCurrentlyLentException{
         actions.set(counter++, new MyAction("librarian: delete section", dtf.format(LocalDateTime.now())));
-
         int sectionId1;
         int ok1 = 0;
         int ok2 = 0;
+        int ok3 = 0;
 
-        System.out.println("Enter the ID of the section you want to delete: ");
-        sectionId1 = myObj.nextInt();
-        myObj.nextLine();
-        for (Sections section : sections)
-            if (sectionId1 == section.getSectionId() && !section.getIsDeleted()) {
-                ok1 = 1;
-                break;
-            }
-        if (ok1 == 0)
-            throw new SectionNotFoundException("Could not find section with this ID! \n");
-
-        for (int i = 0; i < sectionBooks.get(sectionId1 - 1).size(); i++)
-            for (int j = 0; j < users.size(); j++)
-                for (int k = 0; k < userLentBooks.get(j).size(); k++)
-                    if (sectionBooks.get(sectionId1 - 1).get(i).getBookId() == userLentBooks.get(j).get(k).getBookId() && userLentBooks.get(j).get(k).getIsLent()) {
+        if (sections.size() < 1) {
+            System.out.println("\nThere are no sections!");
+        } else {
+            for (Sections section : sections)
+                if (!section.getIsDeleted()) {
+                    ok1 = 1;
+                    break;
+                }
+            if (ok1 == 0) {
+                System.out.println("\nThere are no sections!");
+            } else {
+                System.out.println("\nSection ID: ");
+                sectionId1 = myObj.nextInt();
+                myObj.nextLine();
+                for (Sections section : sections)
+                    if (sectionId1 == section.getSectionId() && !section.getIsDeleted()) {
                         ok2 = 1;
                         break;
                     }
+                if (ok2 == 0)
+                    throw new SectionNotFoundException("Could not find section with this ID!");
 
-        if (ok2 == 1)
-            throw new BookCurrentlyLentException("This section contains a book that is currently lent. You can't remove this section!\n");
+                for (int i = 0; i < sectionBooks.get(sectionId1 - 1).size(); i++)
+                    for (int j = 0; j < users.size(); j++)
+                        for (int k = 0; k < userLentBooks.get(j).size(); k++)
+                            if (sectionBooks.get(sectionId1 - 1).get(i).getBookId() == userLentBooks.get(j).get(k).getBookId() && userLentBooks.get(j).get(k).getIsLent()) {
+                                ok3 = 1;
+                                break;
+                            }
 
-        if (sectionBooks.get(sectionId1 - 1).size() >= 1) {
-            for (int i = 0; i < sectionBooks.get(sectionId1 - 1).size(); i++)
-                for (int j = 0; j < users.size(); j++)
-                    for (int k = 0; k < userLentBooks.get(j).size(); k++)
-                        if (sectionBooks.get(sectionId1 - 1).get(i).getBookId() == userLentBooks.get(j).get(k).getBookId()) {
-                            userLentBooks.get(j).get(k).setIsDeleted(true);
-                        }
+                if (ok3 == 1)
+                    throw new BookCurrentlyLentException("This section contains a book that is currently lent. You can't remove this section!");
+
+                if (sectionBooks.get(sectionId1 - 1).size() >= 1) {
+                    for (int i = 0; i < sectionBooks.get(sectionId1 - 1).size(); i++)
+                        for (int j = 0; j < users.size(); j++)
+                            for (int k = 0; k < userLentBooks.get(j).size(); k++)
+                                if (sectionBooks.get(sectionId1 - 1).get(i).getBookId() == userLentBooks.get(j).get(k).getBookId()) {
+                                    userLentBooks.get(j).get(k).setIsDeleted(true);
+                                }
+                }
+
+                if (sectionBooks.get(sectionId1 - 1).size() >= 1) {
+                    for (int i = 0; i < sectionBooks.get(sectionId1 - 1).size(); i++)
+                        for (int j = 0; j < partners.size(); j++)
+                            for (int k = 0; k < partnerBooks.get(j).size(); k++)
+                                if (sectionBooks.get(sectionId1 - 1).get(i).getBookId() == partnerBooks.get(j).get(k).getBookId()) {
+                                    partnerBooks.get(j).get(k).setIsDeleted(true);
+                                }
+                }
+
+                for (int i = 0; i < sectionBooks.get(sectionId1 - 1).size(); i++)
+                    sectionBooks.get(sectionId1 - 1).get(i).setIsDeleted(true);
+
+                sections.get(sectionId1 - 1).setIsDeleted(true);
+                System.out.println("Section deleted successfully!");
+            }
         }
-
-        if (sectionBooks.get(sectionId1 - 1).size() >= 1) {
-            for (int i = 0; i < sectionBooks.get(sectionId1 - 1).size(); i++)
-                for (int j = 0; j < partners.size(); j++)
-                    for (int k = 0; k < partnerBooks.get(j).size(); k++)
-                        if (sectionBooks.get(sectionId1 - 1).get(i).getBookId() == partnerBooks.get(j).get(k).getBookId()) {
-                            partnerBooks.get(j).get(k).setIsDeleted(true);
-                        }
-        }
-
-        for (int i = 0; i < sectionBooks.get(sectionId1 - 1).size(); i++)
-            sectionBooks.get(sectionId1 - 1).get(i).setIsDeleted(true);
-
-        sections.get(sectionId1 - 1).setIsDeleted(true);
     }
 
     public void deletePartners() throws PartnerNotFoundException, BookCurrentlyLentException{
         actions.set(counter++, new MyAction("librarian: delete partner", dtf.format(LocalDateTime.now())));
-
         int partnerId1;
         int ok1 = 0;
         int ok2 = 0;
+        int ok3 = 0;
 
-        System.out.println("Enter the ID of the partner you want to delete: ");
-        partnerId1 = myObj.nextInt();
-        myObj.nextLine();
+        if (partners.size() < 1) {
+            System.out.println("\nThere are no partners!");
+        } else {
+            for (Partners partner : partners)
+                if (!partner.getIsDeleted()) {
+                    ok1 = 1;
+                    break;
+                }
+            if (ok1 == 0)
+                System.out.println("\nThere are no partners!");
+            else {
+                System.out.println("\nPartner ID: ");
+                partnerId1 = myObj.nextInt();
+                myObj.nextLine();
 
-        for (Partners partner : partners)
-            if (partnerId1 == partner.getPartnerId() && !partner.getIsDeleted()) {
-                ok1 = 1;
-                break;
-            }
-        if (ok1 == 0)
-            throw new PartnerNotFoundException("Could not find partner with this ID! \n");
-
-        for (int i = 0; i < partnerBooks.get(partnerId1 - 1).size(); i++)
-            for (int j = 0; j < users.size(); j++)
-                for (int k = 0; k < userLentBooks.get(j).size(); k++)
-                    if (partnerBooks.get(partnerId1 - 1).get(i).getBookId() == userLentBooks.get(j).get(k).getBookId() && userLentBooks.get(j).get(k).getIsLent()) {
+                for (Partners partner : partners)
+                    if (partnerId1 == partner.getPartnerId() && !partner.getIsDeleted()) {
                         ok2 = 1;
                         break;
                     }
+                if (ok2 == 0)
+                    throw new PartnerNotFoundException("Could not find partner with this ID!");
 
-        if (ok2 == 1)
-            throw new BookCurrentlyLentException("This partner added a book that is currently lent. If you remove this partner, you will automatically remove the book!\n");
+                for (int i = 0; i < partnerBooks.get(partnerId1 - 1).size(); i++)
+                    for (int j = 0; j < users.size(); j++)
+                        for (int k = 0; k < userLentBooks.get(j).size(); k++)
+                            if (partnerBooks.get(partnerId1 - 1).get(i).getBookId() == userLentBooks.get(j).get(k).getBookId() && userLentBooks.get(j).get(k).getIsLent()) {
+                                ok3 = 1;
+                                break;
+                            }
 
-        for (int i = 0; i < partnerBooks.get(partnerId1 - 1).size(); i++)
-            for (int j = 0; j < users.size(); j++)
-                for (int k = 0; k < userLentBooks.get(j).size(); k++)
-                    if (partnerBooks.get(partnerId1 - 1).get(i).getBookId() == userLentBooks.get(j).get(k).getBookId()) {
-                        userLentBooks.get(j).get(k).setIsDeleted(true);
-                    }
+                if (ok3 == 1)
+                    throw new BookCurrentlyLentException("This partner added a book that is currently lent. If you remove this partner, you will remove the book!");
 
-        for (int i = 0; i < partnerBooks.get(partnerId1 - 1).size(); i++)
-            for (int j = 0; j < sections.size(); j++)
-                for (int k = 0; k < sectionBooks.get(j).size(); k++)
-                    if (partnerBooks.get(partnerId1 - 1).get(i).getBookId() == sectionBooks.get(j).get(k).getBookId()) {
-                        sectionBooks.get(j).get(k).setIsDeleted(true);
-                    }
+                for (int i = 0; i < partnerBooks.get(partnerId1 - 1).size(); i++)
+                    for (int j = 0; j < users.size(); j++)
+                        for (int k = 0; k < userLentBooks.get(j).size(); k++)
+                            if (partnerBooks.get(partnerId1 - 1).get(i).getBookId() == userLentBooks.get(j).get(k).getBookId()) {
+                                userLentBooks.get(j).get(k).setIsDeleted(true);
+                            }
 
-        for (int i = 0; i < partnerBooks.get(partnerId1 - 1).size(); i++)
-            partnerBooks.get(partnerId1 - 1).get(i).setIsDeleted(true);
+                for (int i = 0; i < partnerBooks.get(partnerId1 - 1).size(); i++)
+                    for (int j = 0; j < sections.size(); j++)
+                        for (int k = 0; k < sectionBooks.get(j).size(); k++)
+                            if (partnerBooks.get(partnerId1 - 1).get(i).getBookId() == sectionBooks.get(j).get(k).getBookId()) {
+                                sectionBooks.get(j).get(k).setIsDeleted(true);
+                            }
 
-        partners.get(partnerId1 - 1).setIsDeleted(true);
+                for (int i = 0; i < partnerBooks.get(partnerId1 - 1).size(); i++)
+                    partnerBooks.get(partnerId1 - 1).get(i).setIsDeleted(true);
+
+                partners.get(partnerId1 - 1).setIsDeleted(true);
+                System.out.println("Partner deleted successfully!");
+            }
+        }
     }
     public void deleteUsers() throws UserNotFoundException, BookCurrentlyLentException{
         actions.set(counter++, new MyAction("librarian: delete user", dtf.format(LocalDateTime.now())));
-
         int userId1;
         int ok1 = 0;
         int ok2 = 0;
+        int ok3 = 0;
 
-        System.out.println("Enter the ID of the user you want to delete: ");
-        userId1 = myObj.nextInt();
-        myObj.nextLine();
-        for (Users user : users)
-            if (userId1 == user.getUserId() && !user.getIsDeleted()) {
-                ok1 = 1;
-                break;
+        if (users.size() < 1) {
+            System.out.println("\nThere are no users!");
+        } else {
+            for (Users user : users)
+                if (!user.getIsDeleted()) {
+                    ok1 = 1;
+                    break;
+                }
+            if (ok1 == 0)
+                System.out.println("\nThere are no users!");
+            else {
+                System.out.println("\nUser ID: ");
+                userId1 = myObj.nextInt();
+                myObj.nextLine();
+                for (Users user : users)
+                    if (userId1 == user.getUserId() && !user.getIsDeleted()) {
+                        ok2 = 1;
+                        break;
+                    }
+                if (ok2 == 0)
+                    throw new UserNotFoundException("Could not find user with this ID!");
+
+                for (int j = 0; j < userLentBooks.get(userId1 - 1).size(); j++)
+                    if (userLentBooks.get(userId1 - 1).get(j).getIsLent()) {
+                        ok3 = 1;
+                        break;
+                    }
+
+                if (ok3 == 1)
+                    throw new BookCurrentlyLentException("This user is currently lending a book! You can't remove this user!");
+
+                for (int i = 0; i < userLentBooks.get(userId1 - 1).size(); i++)
+                    userLentBooks.get(userId1 - 1).get(i).setIsDeleted(true);
+
+                for (int i = 0; i < discounts.get(userId1 - 1).size(); i++)
+                    discounts.get(userId1 - 1).get(i).setIsUsed(true);
+
+                users.get(userId1 - 1).setIsDeleted(true);
+                System.out.println("User deleted successfully!");
             }
-        if (ok1 == 0)
-            throw new UserNotFoundException("Could not find user with this ID! \n");
-
-        for (int j = 0; j < userLentBooks.get(userId1 - 1).size(); j++)
-            if (userLentBooks.get(userId1 - 1).get(j).getIsLent()) {
-                ok2 = 1;
-                break;
-            }
-
-        if (ok2 == 1)
-            throw new BookCurrentlyLentException("This user is currently lending a book! You can't remove this user!\n");
-
-        users.get(userId1 - 1).setIsDeleted(true);
+        }
     }
 }

@@ -18,6 +18,7 @@ public class LibrarianService {
     private static int partnerId;
     private static int userId;
     private static int invoiceId;
+    private GetConnection conn = GetConnection.getInstance();
 
     public LibrarianService(){
 
@@ -99,20 +100,8 @@ public class LibrarianService {
         }
     }
 
-    public Connection getConnection(){
-        try {
-            String dbURL = "jdbc:oracle:thin:@localhost:1521:xe";
-            String username = "system";
-            String password = "oracle";
-            return DriverManager.getConnection(dbURL, username, password);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
     public void readSections() throws SQLException {
-        Connection connection = getConnection();
+        Connection connection = conn.getConnection();
         Statement statement = connection.createStatement();
         ResultSet result = statement.executeQuery("SELECT * FROM SECTION");
         while (result.next()) {
@@ -125,7 +114,7 @@ public class LibrarianService {
     }
 
     public void readPartners() throws SQLException {
-        Connection connection = getConnection();
+        Connection connection = conn.getConnection();
         Statement statement = connection.createStatement();
         ResultSet result = statement.executeQuery("SELECT * FROM PARTNER");
         while (result.next()) {
@@ -141,7 +130,7 @@ public class LibrarianService {
     }
 
     public void readUsers() throws SQLException {
-        Connection connection = getConnection();
+        Connection connection = conn.getConnection();
         Statement statement = connection.createStatement();
         ResultSet result = statement.executeQuery("SELECT * FROM \"USER\"");
         while (result.next()) {
@@ -157,7 +146,7 @@ public class LibrarianService {
     }
 
     public void readInvoices() throws SQLException {
-        Connection connection = getConnection();
+        Connection connection = conn.getConnection();
         Statement statement = connection.createStatement();
         ResultSet result = statement.executeQuery("SELECT * FROM INVOICE");
 
@@ -174,7 +163,7 @@ public class LibrarianService {
     }
 
     public void readDiscounts() throws SQLException {
-        Connection connection = getConnection();
+        Connection connection = conn.getConnection();
         Statement statement = connection.createStatement();
         ResultSet result = statement.executeQuery("SELECT * FROM DISCOUNT");
 
@@ -189,7 +178,7 @@ public class LibrarianService {
     }
 
     public void readBooks() throws SQLException {
-        Connection connection = getConnection();
+        Connection connection = conn.getConnection();
         Statement statement = connection.createStatement();
         ResultSet result = statement.executeQuery("SELECT * FROM BOOK");
 
@@ -208,7 +197,7 @@ public class LibrarianService {
     }
 
     public void readLentBooks() throws SQLException{
-        Connection connection = getConnection();
+        Connection connection = conn.getConnection();
         MyDate issuedDate = new MyDate();
         Statement statement2 = connection.createStatement();
         ResultSet result = statement2.executeQuery("SELECT * FROM LENT_BOOK");
@@ -235,7 +224,7 @@ public class LibrarianService {
     public void insertSection() throws SQLException, AlreadyUsedNameException {
         ++sectionId;
 
-        Connection connection = getConnection();
+        Connection connection = conn.getConnection();
         Statement statement2 = connection.createStatement();
 
         System.out.println("\nSection name: ");
@@ -257,7 +246,7 @@ public class LibrarianService {
     public void insertPartner() throws SQLException, IncorrectMailFormatException, AlreadyUsedEmailException {
         ++partnerId;
 
-        Connection connection = getConnection();
+        Connection connection = conn.getConnection();
         Statement statement2 = connection.createStatement();
 
         System.out.println("\nPartner name: ");
@@ -290,7 +279,7 @@ public class LibrarianService {
     public void insertUser() throws SQLException, IncorrectMailFormatException, AlreadyUsedEmailException {
         ++userId;
 
-        Connection connection = getConnection();
+        Connection connection = conn.getConnection();
         Statement statement = connection.createStatement();
 
         System.out.println("\nUser name: ");
@@ -338,7 +327,7 @@ public class LibrarianService {
         Books sectionBook = new Books();
         _10PercentDiscount discount = new _10PercentDiscount();
         MyDate tempDate = new MyDate();
-        Connection connection = getConnection();
+        Connection connection = conn.getConnection();
 
         for (int i = 0; i < partners.size(); i++)
             for (int j = 0; j < partnerBooks.get(i).size(); j++)
@@ -564,7 +553,7 @@ public class LibrarianService {
         LentBooks lentBook = new LentBooks();
         Books sectionBook = new Books();
         Books partnerBook = new Books();
-        Connection connection = getConnection();
+        Connection connection = conn.getConnection();
 
         for (int i = 0; i < users.size(); i++)
             for (int j = 0; j < userLentBooks.get(i).size(); j++)
@@ -732,7 +721,7 @@ public class LibrarianService {
     public void printInvoice() throws SQLException {
         LentBooks lentBook = new LentBooks();
         Users user = new Users();
-        Connection connection = getConnection();
+        Connection connection = conn.getConnection();
         String tempDate;
 
         Statement statement1 = connection.createStatement();
@@ -844,7 +833,7 @@ public class LibrarianService {
 
     public void printUsers() throws SQLException {
         int countUser;
-        Connection connection = getConnection();
+        Connection connection = conn.getConnection();
         Statement statement1 = connection.createStatement();
         ResultSet result1 = statement1.executeQuery("SELECT COUNT(*) FROM \"USER\"");
 
@@ -892,7 +881,7 @@ public class LibrarianService {
 
     public void printPartners() throws SQLException {
         int countPartner;
-        Connection connection = getConnection();
+        Connection connection = conn.getConnection();
         Statement statement1 = connection.createStatement();
         ResultSet result1 = statement1.executeQuery("SELECT COUNT(*) FROM PARTNER");
 
@@ -940,7 +929,7 @@ public class LibrarianService {
 
     public void printSections() throws SQLException {
         int countSection;
-        Connection connection = getConnection();
+        Connection connection = conn.getConnection();
         Statement statement1 = connection.createStatement();
         ResultSet result1 = statement1.executeQuery("SELECT COUNT(*) FROM SECTION");
 
@@ -982,7 +971,7 @@ public class LibrarianService {
 
     public void printSectionBooks() throws SectionNotFoundException, SQLException {
         int countSection;
-        Connection connection = getConnection();
+        Connection connection = conn.getConnection();
         Statement statement1 = connection.createStatement();
         ResultSet result1 = statement1.executeQuery("SELECT COUNT(*) FROM SECTION");
 
@@ -1053,7 +1042,7 @@ public class LibrarianService {
 
     public void printPartnerBooks() throws PartnerNotFoundException, SQLException {
         int countPartner;
-        Connection connection = getConnection();
+        Connection connection = conn.getConnection();
         Statement statement1 = connection.createStatement();
         ResultSet result1 = statement1.executeQuery("SELECT COUNT(*) FROM PARTNER");
 
@@ -1124,7 +1113,7 @@ public class LibrarianService {
 
     public void printUserLentBooks() throws UserNotFoundException, SQLException {
         int countUser;
-        Connection connection = getConnection();
+        Connection connection = conn.getConnection();
         Statement statement1 = connection.createStatement();
         ResultSet result1 = statement1.executeQuery("SELECT COUNT(*) FROM \"USER\"");
 
@@ -1211,7 +1200,7 @@ public class LibrarianService {
 
     public void printUserReturnedBooks() throws UserNotFoundException, SQLException{
         int countUser;
-        Connection connection = getConnection();
+        Connection connection = conn.getConnection();
         Statement statement1 = connection.createStatement();
         ResultSet result1 = statement1.executeQuery("SELECT COUNT(*) FROM \"USER\"");
 
@@ -1326,7 +1315,7 @@ public class LibrarianService {
 
     public void printIssuedBooks() throws SQLException {
         int countLentBook;
-        Connection connection = getConnection();
+        Connection connection = conn.getConnection();
         Statement statement1 = connection.createStatement();
         ResultSet result1 = statement1.executeQuery("SELECT COUNT(*) FROM LENT_BOOK WHERE UPPER(IS_LENT) = 'TRUE'");
 
@@ -1398,7 +1387,7 @@ public class LibrarianService {
 
     public void printBooks() throws SQLException {
         int countBook;
-        Connection connection = getConnection();
+        Connection connection = conn.getConnection();
         Statement statement1 = connection.createStatement();
         ResultSet result1 = statement1.executeQuery("SELECT COUNT(*) FROM BOOK WHERE UPPER(IS_LENT) = 'FALSE'");
 
@@ -1447,7 +1436,7 @@ public class LibrarianService {
         int countDiscount = 0;
         int userId1;
         int ok = 0;
-        Connection connection = getConnection();
+        Connection connection = conn.getConnection();
         Statement statement1 = connection.createStatement();
         ResultSet result1 = statement1.executeQuery("SELECT COUNT(*) FROM \"USER\"");
 
@@ -1515,7 +1504,7 @@ public class LibrarianService {
         int ok2 = 0;
         int ok3 = 0;
         int ok4 = 0;
-        Connection connection = getConnection();
+        Connection connection = conn.getConnection();
 
         for (int i = 0; i < partners.size(); i++)
             if (partnerBooks.get(i).size() > 0) {
@@ -1589,7 +1578,7 @@ public class LibrarianService {
         int ok1 = 0;
         int ok2 = 0;
         int ok3 = 0;
-        Connection connection = getConnection();
+        Connection connection = conn.getConnection();
 
         if(sections.size() < 1) {
             System.out.println("\nThere are no sections!");
@@ -1662,7 +1651,7 @@ public class LibrarianService {
         int ok1 = 0;
         int ok2 = 0;
         int ok3 = 0;
-        Connection connection = getConnection();
+        Connection connection = conn.getConnection();
 
         if(partners.size() < 1){
             System.out.println("\nThere are no partners!");
@@ -1733,7 +1722,7 @@ public class LibrarianService {
         int ok1 = 0;
         int ok2 = 0;
         int ok3 = 0;
-        Connection connection = getConnection();
+        Connection connection = conn.getConnection();
 
         if(users.size() < 1){
             System.out.println("\nThere are no users!");

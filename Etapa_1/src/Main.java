@@ -86,11 +86,14 @@ public class Main{
                 case 1:
                 {
                     LibrarianService librarianService = new LibrarianService();
-                    try {
-                        librarianService.loginInformation();
-                    } catch (UsernameNotFoundException | IncorrectPasswordException e) {
-                        e.printStackTrace();
-                        System.exit(1);
+                    boolean running = true;
+                    while(running) {
+                        try {
+                            librarianService.loginInformation();
+                            running = false;
+                        } catch (Exception e) {
+                            System.out.println(e.getMessage());
+                        }
                     }
                     while (choose != 20){
                         System.out.print("\n");
@@ -100,51 +103,66 @@ public class Main{
                         switch (choose) {
                             case 1:
                             {
-                                try {
-                                    librarianService.addNewSection();
-                                } catch (AlreadyUsedNameException e) {
-                                    e.printStackTrace();
-                                    System.exit(1);
+                                running = true;
+                                while(running) {
+                                    try {
+                                        librarianService.addNewSection();
+                                        running = false;
+                                    } catch (Exception e) {
+                                        System.out.println(e.getMessage());
+                                    }
                                 }
                                 break;
                             }
                             case 2:
                             {
-                                try {
-                                    librarianService.addNewPartner();
-                                } catch (AlreadyUsedEmailException | IncorrectMailFormatException e) {
-                                    e.printStackTrace();
-                                    System.exit(1);
+                                running = true;
+                                while(running) {
+                                    try {
+                                        librarianService.addNewPartner();
+                                        running = false;
+                                    } catch (Exception e) {
+                                        System.out.println(e.getMessage());
+                                    }
                                 }
                                 break;
                             }
                             case 3:
                             {
-                                try {
-                                    librarianService.addNewUser();
-                                } catch (AlreadyUsedEmailException | IncorrectMailFormatException e) {
-                                    e.printStackTrace();
-                                    System.exit(1);
+                                running = true;
+                                while(running) {
+                                    try {
+                                        librarianService.addNewUser();
+                                        running = false;
+                                    } catch (Exception e) {
+                                        System.out.println(e.getMessage());
+                                    }
                                 }
                                 break;
                             }
                             case 4:
                             {
-                                try {
-                                    librarianService.lendNewBook();
-                                } catch (BookNotFoundException | BookAlreadyLentException | UserNotFoundException | IncorrectDateFormatException | MaxNumOfDaysException | WrongInputException | InvalidCodeException | DateNotValidException e) {
-                                    e.printStackTrace();
-                                    System.exit(1);
+                                running = true;
+                                while(running) {
+                                    try {
+                                        librarianService.lendNewBook();
+                                        running = false;
+                                    } catch (Exception e) {
+                                        System.out.println(e.getMessage());
+                                    }
                                 }
                                 break;
                             }
                             case 5:
                             {
-                                try {
-                                    librarianService.returnBook();
-                                } catch (UserNotFoundException | BookNotFoundException | IncorrectDateFormatException | BookNotLentException | NoLentBooksException | WrongInputException | DateNotValidException e) {
-                                    e.printStackTrace();
-                                    System.exit(1);
+                                running = true;
+                                while(running) {
+                                    try {
+                                        librarianService.returnBook();
+                                        running = false;
+                                    } catch (Exception e) {
+                                        System.out.println(e.getMessage());
+                                    }
                                 }
                                 break;
                             }
@@ -155,11 +173,14 @@ public class Main{
                             }
                             case 7:
                             {
-                                try {
-                                    librarianService.printSectionBooks();
-                                } catch (SectionNotFoundException e) {
-                                    e.printStackTrace();
-                                    System.exit(1);
+                                running = true;
+                                while(running) {
+                                    try {
+                                        librarianService.printSectionBooks();
+                                        running = false;
+                                    } catch (Exception e) {
+                                        System.out.println(e.getMessage());
+                                    }
                                 }
                                 break;
                             }
@@ -170,11 +191,14 @@ public class Main{
                             }
                             case 9:
                             {
-                                try {
-                                    librarianService.printPartnerBooks();
-                                } catch (PartnerNotFoundException e) {
-                                    e.printStackTrace();
-                                    System.exit(1);
+                                running = true;
+                                while(running) {
+                                    try {
+                                        librarianService.printPartnerBooks();
+                                        running = false;
+                                    } catch (Exception e) {
+                                        System.out.println(e.getMessage());
+                                    }
                                 }
                                 break;
                             }
@@ -185,21 +209,27 @@ public class Main{
                             }
                             case 11:
                             {
-                                try {
-                                    librarianService.printUserLentBooks();
-                                } catch (UserNotFoundException e) {
-                                    e.printStackTrace();
-                                    System.exit(1);
+                                running = true;
+                                while(running) {
+                                    try {
+                                        librarianService.printUserLentBooks();
+                                        running = false;
+                                    } catch (Exception e) {
+                                        System.out.println(e.getMessage());
+                                    }
                                 }
                                 break;
                             }
                             case 12:
                             {
-                                try {
-                                    librarianService.printUserReturnedBooks();
-                                } catch (UserNotFoundException e) {
-                                    e.printStackTrace();
-                                    System.exit(1);
+                                running = true;
+                                while(running) {
+                                    try {
+                                        librarianService.printUserReturnedBooks();
+                                        running = false;
+                                    } catch (Exception e) {
+                                        System.out.println(e.getMessage());
+                                    }
                                 }
                                 break;
                             }
@@ -215,51 +245,66 @@ public class Main{
                             }
                             case 15:
                             {
-                                try {
-                                    librarianService.printUserDiscounts();
-                                } catch (UserNotFoundException e) {
-                                    e.printStackTrace();
-                                    System.exit(1);
+                                running = true;
+                                while(running) {
+                                    try {
+                                        librarianService.printUserDiscounts();
+                                        running = false;
+                                    } catch (Exception e) {
+                                        System.out.println(e.getMessage());
+                                    }
                                 }
                                 break;
                             }
                             case 16:
                             {
-                                try {
-                                    librarianService.deleteBook();
-                                } catch (BookNotFoundException | BookCurrentlyLentException e) {
-                                    e.printStackTrace();
-                                    System.exit(1);
+                                running = true;
+                                while(running) {
+                                    try {
+                                        librarianService.deleteBook();
+                                        running = false;
+                                    } catch (Exception e) {
+                                        System.out.println(e.getMessage());
+                                    }
                                 }
                                 break;
                             }
                             case 17:
                             {
-                                try {
-                                    librarianService.deleteSections();
-                                } catch (SectionNotFoundException | BookCurrentlyLentException e) {
-                                    e.printStackTrace();
-                                    System.exit(1);
+                                running = true;
+                                while(running) {
+                                    try {
+                                        librarianService.deleteSections();
+                                        running = false;
+                                    } catch (Exception e) {
+                                        System.out.println(e.getMessage());
+                                    }
                                 }
                                 break;
                             }
                             case 18:
                             {
-                                try {
-                                    librarianService.deletePartners();
-                                } catch (PartnerNotFoundException | BookCurrentlyLentException e) {
-                                    e.printStackTrace();
-                                    System.exit(1);
+                                running = true;
+                                while(running) {
+                                    try {
+                                        librarianService.deletePartners();
+                                        running = false;
+                                    } catch (Exception e) {
+                                        System.out.println(e.getMessage());
+                                    }
                                 }
                                 break;
                             }
                             case 19:
                             {
-                                try {
-                                    librarianService.deleteUsers();
-                                } catch (UserNotFoundException | BookCurrentlyLentException e) {
-                                    e.printStackTrace();
-                                    System.exit(1);
+                                running = true;
+                                while(running) {
+                                    try {
+                                        librarianService.deleteUsers();
+                                        running = false;
+                                    } catch (Exception e) {
+                                        System.out.println(e.getMessage());
+                                    }
                                 }
                                 break;
                             }
@@ -284,11 +329,14 @@ public class Main{
                         choose = 3;
                     }
                     else {
-                        try {
-                            partnerService.loginInformation();
-                        } catch (EmailNotFoundException | IncorrectPasswordException | IncorrectPassFormatException e) {
-                            e.printStackTrace();
-                            System.exit(1);
+                        boolean running = true;
+                        while(running) {
+                            try {
+                                partnerService.loginInformation();
+                                running = false;
+                            } catch (Exception e) {
+                                System.out.println(e.getMessage());
+                            }
                         }
                     }
                     while (choose != 3) {
@@ -299,11 +347,14 @@ public class Main{
                         switch (choose) {
                             case 1:
                             {
-                                try {
-                                    partnerService.addNewBook();
-                                } catch (SectionNotFoundException | BookAlreadyAddedException e) {
-                                    e.printStackTrace();
-                                    System.exit(1);
+                                boolean running = true;
+                                while(running) {
+                                    try {
+                                        partnerService.addNewBook();
+                                        running = false;
+                                    } catch (Exception e) {
+                                        System.out.println(e.getMessage());
+                                    }
                                 }
                                 break;
                             }
@@ -333,11 +384,14 @@ public class Main{
                         choose = 5;
                     }
                     else {
-                        try {
-                            userService.loginInformation();
-                        } catch (EmailNotFoundException | IncorrectPasswordException | IncorrectPassFormatException e) {
-                            e.printStackTrace();
-                            System.exit(1);
+                        boolean running = true;
+                        while(running) {
+                            try {
+                                userService.loginInformation();
+                                running = false;
+                            } catch (Exception e) {
+                                System.out.println(e.getMessage());
+                            }
                         }
                     }
                     while (choose != 5) {

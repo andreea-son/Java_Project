@@ -9,11 +9,11 @@ public class PartnerService {
     private static ArrayList<String> author = new ArrayList<>();
     private static ArrayList<String> title = new ArrayList<>();
     private static ArrayList<String> description = new ArrayList<>();
-    private LibrarianService librarianService = new LibrarianService();
     private static int partnerId = LibrarianService.getPartners().size();
     private static int i;
     private static int counter;
     private Scanner myObj = new Scanner(System.in);
+    private GetConnection conn = GetConnection.getInstance();
 
     public PartnerService(){
 
@@ -21,7 +21,7 @@ public class PartnerService {
 
     public void loginInformation() throws EmailNotFoundException, IncorrectPasswordException, IncorrectPassFormatException, SQLException {
         int ok = 0;
-        Connection connection = librarianService.getConnection();
+        Connection connection = conn.getConnection();
 
         System.out.println("\nEmail: ");
         String partnerEmail = myObj.nextLine();
@@ -84,7 +84,7 @@ public class PartnerService {
         int sectionId;
         int bookId;
         int ok = 0;
-        Connection connection = librarianService.getConnection();
+        Connection connection = conn.getConnection();
 
         for (ArrayList<Books> partnerBook : LibrarianService.getPartnerBooks())
             for (int j = 0; j < partnerBook.size(); j++)
@@ -146,7 +146,7 @@ public class PartnerService {
 
     public void printPartnerBooks() throws SQLException {
         int countPartnerBooks;
-        Connection connection = librarianService.getConnection();
+        Connection connection = conn.getConnection();
 
         Statement statement1 = connection.createStatement();
         ResultSet result1 = statement1.executeQuery("SELECT COUNT(*) FROM BOOK WHERE PARTNER_ID = " + partnerId);

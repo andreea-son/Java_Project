@@ -18,19 +18,22 @@ public class CSVUserService {
     private static String[] userEmail = new String[100];
     private static boolean[] isDeleted = new boolean[100];
 
-    private static CSVUserService csvUserService = new CSVUserService();
+    private CSVUserService() {}
 
-    private CSVUserService(){}
+    private static CSVUserService single_instance = null;
 
     public static CSVUserService getInstance() {
-        return csvUserService;
+        if (single_instance == null)
+            single_instance = new CSVUserService();
+
+        return single_instance;
     }
 
     public void readUsers() {
         for (int i = 0; i < 100; i++)
             userField[i] = new String[20];
 
-        CSVPath = "../csv/users.csv";
+        CSVPath = "Resources/csv/users.csv";
         try {
             BufferedReader bufferedReader = new BufferedReader(new FileReader(CSVPath));
             while ((lineToRead = bufferedReader.readLine()) != null) {

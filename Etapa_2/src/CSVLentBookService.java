@@ -24,19 +24,22 @@ public class CSVLentBookService {
     private static Integer[] userId = new Integer[100];
     private static LibrarianService librarian = new LibrarianService();
 
-    private static CSVLentBookService csvLentBookService = new CSVLentBookService();
-
     private CSVLentBookService() {}
 
+    private static CSVLentBookService single_instance = null;
+
     public static CSVLentBookService getInstance() {
-        return csvLentBookService;
+        if (single_instance == null)
+            single_instance = new CSVLentBookService();
+
+        return single_instance;
     }
 
     protected void readLentBooks() {
         for (int i = 0; i < 100; i++)
             lentBookField[i] = new String[20];
 
-        CSVPath = "../csv/lentBooks.csv";
+        CSVPath = "Resources/csv/lentBooks.csv";
 
         try {
             BufferedReader bufferedReader = new BufferedReader(new FileReader(CSVPath));
@@ -95,5 +98,3 @@ public class CSVLentBookService {
         }
     }
 }
-
-

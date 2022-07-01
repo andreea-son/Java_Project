@@ -18,19 +18,22 @@ public class CSVPartnerService {
     private static boolean[] isDeleted = new boolean[100];
     private static LibrarianService librarian = new LibrarianService();
 
-    private static CSVPartnerService csvPartnerService = new CSVPartnerService();
-
     private CSVPartnerService() {}
 
+    private static CSVPartnerService single_instance = null;
+
     public static CSVPartnerService getInstance() {
-        return csvPartnerService;
+        if (single_instance == null)
+            single_instance = new CSVPartnerService();
+
+        return single_instance;
     }
 
     public void readPartners() {
         for (int i = 0; i < 100; i++)
             partnerField[i] = new String[20];
 
-        CSVPath = "../csv/partners.csv";
+        CSVPath = "Resources/csv/partners.csv";
         try {
             BufferedReader bufferedReader = new BufferedReader(new FileReader(CSVPath));
             while ((lineToRead = bufferedReader.readLine()) != null) {

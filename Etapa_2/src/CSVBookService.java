@@ -21,19 +21,22 @@ public class CSVBookService {
     private static Integer[] partnerId = new Integer[100];
     private static LibrarianService librarian = new LibrarianService();
 
-    private static CSVBookService csvBookService = new CSVBookService();
-
     private CSVBookService() {}
 
+    private static CSVBookService single_instance = null;
+
     public static CSVBookService getInstance() {
-        return csvBookService;
+        if (single_instance == null)
+            single_instance = new CSVBookService();
+
+        return single_instance;
     }
 
     protected void readBooks() {
         for (int i = 0; i < 100; i++)
             bookField[i] = new String[20];
 
-        CSVPath = "../csv/books.csv";
+        CSVPath = "Resources/csv/books.csv";
 
         try {
             BufferedReader bufferedReader = new BufferedReader(new FileReader(CSVPath));

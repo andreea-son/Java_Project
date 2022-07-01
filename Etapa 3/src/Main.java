@@ -81,43 +81,36 @@ public class Main{
             librarianService.readInvoices();
         } catch (SQLException e) {
             e.printStackTrace();
-            System.exit(1);
         }
         try {
             librarianService.readUsers();
         } catch (SQLException e) {
             e.printStackTrace();
-            System.exit(1);
         }
         try {
             librarianService.readPartners();
         } catch (SQLException e) {
             e.printStackTrace();
-            System.exit(1);
         }
         try {
             librarianService.readDiscounts();
         } catch (SQLException e) {
             e.printStackTrace();
-            System.exit(1);
         }
         try {
             librarianService.readSections();
         } catch (SQLException e) {
             e.printStackTrace();
-            System.exit(1);
         }
         try {
             librarianService.readBooks();
         } catch (SQLException e) {
             e.printStackTrace();
-            System.exit(1);
         }
         try {
             librarianService.readLentBooks();
         } catch (SQLException e) {
             e.printStackTrace();
-            System.exit(1);
         }
         while (true) {
             System.out.print("\n");
@@ -127,11 +120,14 @@ public class Main{
             switch (choose) {
                 case 1:
                 {
-                    try {
-                        librarianService.loginInformation();
-                    } catch (UsernameNotFoundException | IncorrectPasswordException e) {
-                        e.printStackTrace();
-                        System.exit(1);
+                    boolean running = true;
+                    while(running) {
+                        try {
+                            librarianService.loginInformation();
+                            running = false;
+                        } catch (Exception e) {
+                            System.out.println(e.getMessage());
+                        }
                     }
                     while (choose != 20){
                         System.out.print("\n");
@@ -141,193 +137,248 @@ public class Main{
                         switch (choose) {
                             case 1:
                             {
-                                try {
-                                    librarianService.insertSection();
-                                } catch (SQLException | AlreadyUsedNameException e) {
-                                    e.printStackTrace();
-                                    System.exit(1);
+                                running = true;
+                                while(running) {
+                                    try {
+                                        librarianService.insertSection();
+                                        running = false;
+                                    } catch (Exception e) {
+                                        System.out.println(e.getMessage());
+                                    }
                                 }
                                 break;
                             }
                             case 2:
                             {
-                                try {
-                                    librarianService.insertPartner();
-                                } catch (SQLException | IncorrectMailFormatException | AlreadyUsedEmailException e) {
-                                    e.printStackTrace();
-                                    System.exit(1);
+                                running = true;
+                                while(running) {
+                                    try {
+                                        librarianService.insertPartner();
+                                        running = false;
+                                    } catch (Exception e) {
+                                        System.out.println(e.getMessage());
+                                    }
                                 }
                                 break;
                             }
                             case 3:
                             {
-                                try {
-                                    librarianService.insertUser();
-                                } catch (SQLException | IncorrectMailFormatException | AlreadyUsedEmailException e) {
-                                    e.printStackTrace();
-                                    System.exit(1);
+                                running = true;
+                                while(running) {
+                                    try {
+                                        librarianService.insertUser();
+                                        running = false;
+                                    } catch (Exception e) {
+                                        System.out.println(e.getMessage());
+                                    }
                                 }
                                 break;
                             }
                             case 4:
                             {
-                                try {
-                                    librarianService.lendNewBook();
-                                } catch (BookNotFoundException | BookAlreadyLentException | UserNotFoundException | IncorrectDateFormatException | MaxNumOfDaysException | WrongInputException | InvalidCodeException | DateNotValidException | SQLException e) {
-                                    e.printStackTrace();
-                                    System.exit(1);
+                                running = true;
+                                while(running) {
+                                    try {
+                                        librarianService.lendNewBook();
+                                        running = false;
+                                    } catch (Exception e) {
+                                        System.out.println(e.getMessage());
+                                    }
                                 }
                                 break;
                             }
                             case 5:
                             {
-                                try {
-                                    librarianService.returnBook();
-                                } catch (UserNotFoundException | BookNotFoundException | IncorrectDateFormatException | BookNotLentException | NoLentBooksException | WrongInputException | DateNotValidException | SQLException e) {
-                                    e.printStackTrace();
-                                    System.exit(1);
+                                running = true;
+                                while(running) {
+                                    try {
+                                        librarianService.returnBook();
+                                        running = false;
+                                    } catch (Exception e) {
+                                        System.out.println(e.getMessage());
+                                    }
                                 }
                                 break;
                             }
                             case 6:
                             {
-                                try {
-                                    librarianService.printSections();
-                                } catch (SQLException e) {
-                                    e.printStackTrace();
-                                    System.exit(1);
+                                running = true;
+                                while(running) {
+                                    try {
+                                        librarianService.printSections();
+                                        running = false;
+                                    } catch (Exception e) {
+                                        System.out.println(e.getMessage());
+                                    }
                                 }
                                 break;
                             }
                             case 7:
                             {
-                                try {
-                                    librarianService.printSectionBooks();
-                                } catch (SectionNotFoundException | SQLException e) {
-                                    e.printStackTrace();
-                                    System.exit(1);
+                                running = true;
+                                while(running) {
+                                    try {
+                                        librarianService.printSectionBooks();
+                                        running = false;
+                                    } catch (Exception e) {
+                                        System.out.println(e.getMessage());
+                                    }
                                 }
-
                                 break;
                             }
                             case 8:
                             {
-                                try {
-                                    librarianService.printPartners();
-                                } catch (SQLException e) {
-                                    e.printStackTrace();
-                                    System.exit(1);
+                                running = true;
+                                while(running) {
+                                    try {
+                                        librarianService.printPartners();
+                                        running = false;
+                                    } catch (Exception e) {
+                                        System.out.println(e.getMessage());
+                                    }
                                 }
                                 break;
                             }
                             case 9:
                             {
-                                try {
-                                    librarianService.printPartnerBooks();
-                                } catch (PartnerNotFoundException | SQLException e) {
-                                    e.printStackTrace();
-                                    System.exit(1);
+                                running = true;
+                                while(running) {
+                                    try {
+                                        librarianService.printPartnerBooks();
+                                        running = false;
+                                    } catch (Exception e) {
+                                        System.out.println(e.getMessage());
+                                    }
                                 }
                                 break;
                             }
                             case 10:
                             {
-                                try {
-                                    librarianService.printUsers();
-                                } catch (SQLException e) {
-                                    e.printStackTrace();
-                                    System.exit(1);
+                                running = true;
+                                while(running) {
+                                    try {
+                                        librarianService.printUsers();
+                                        running = false;
+                                    } catch (Exception e) {
+                                        System.out.println(e.getMessage());
+                                    }
                                 }
                                 break;
                             }
                             case 11:
                             {
-                                try {
-                                    librarianService.printUserLentBooks();
-                                } catch (UserNotFoundException | SQLException e) {
-                                    e.printStackTrace();
-                                    System.exit(1);
+                                running = true;
+                                while(running) {
+                                    try {
+                                        librarianService.printUserLentBooks();
+                                        running = false;
+                                    } catch (Exception e) {
+                                        System.out.println(e.getMessage());
+                                    }
                                 }
                                 break;
                             }
                             case 12:
                             {
-                                try {
-                                    librarianService.printUserReturnedBooks();
-                                } catch (UserNotFoundException | SQLException e) {
-                                    e.printStackTrace();
-                                    System.exit(1);
+                                running = true;
+                                while(running) {
+                                    try {
+                                        librarianService.printUserReturnedBooks();
+                                        running = false;
+                                    } catch (Exception e) {
+                                        System.out.println(e.getMessage());
+                                    }
                                 }
                                 break;
                             }
                             case 13:
                             {
-                                try {
-                                    librarianService.printIssuedBooks();
-                                } catch (SQLException e) {
-                                    e.printStackTrace();
-                                    System.exit(1);
+                                running = true;
+                                while(running) {
+                                    try {
+                                        librarianService.printIssuedBooks();
+                                        running = false;
+                                    } catch (Exception e) {
+                                        System.out.println(e.getMessage());
+                                    }
                                 }
                                 break;
                             }
                             case 14:
                             {
-                                try {
-                                    librarianService.printBooks();
-                                } catch (SQLException e) {
-                                    e.printStackTrace();
-                                    System.exit(1);
+                                running = true;
+                                while(running) {
+                                    try {
+                                        librarianService.printBooks();
+                                        running = false;
+                                    } catch (Exception e) {
+                                        System.out.println(e.getMessage());
+                                    }
                                 }
                                 break;
                             }
                             case 15:
                             {
-                                try {
-                                    librarianService.printUserDiscounts();
-                                } catch (UserNotFoundException | SQLException e) {
-                                    e.printStackTrace();
-                                    System.exit(1);
+                                running = true;
+                                while(running) {
+                                    try {
+                                        librarianService.printUserDiscounts();
+                                        running = false;
+                                    } catch (Exception e) {
+                                        System.out.println(e.getMessage());
+                                    }
                                 }
                                 break;
                             }
                             case 16:
                             {
-
-                                try {
-                                    librarianService.deleteBook();
-                                } catch (BookNotFoundException | BookCurrentlyLentException | SQLException e) {
-                                    e.printStackTrace();
-                                    System.exit(1);
+                                running = true;
+                                while(running) {
+                                    try {
+                                        librarianService.deleteBook();
+                                        running = false;
+                                    } catch (Exception e) {
+                                        System.out.println(e.getMessage());
+                                    }
                                 }
                                 break;
                             }
                             case 17:
                             {
-                                try {
-                                    librarianService.deleteSections();
-                                } catch (SectionNotFoundException | BookCurrentlyLentException | SQLException e) {
-                                    e.printStackTrace();
-                                    System.exit(1);
+                                running = true;
+                                while(running) {
+                                    try {
+                                        librarianService.deleteSections();
+                                        running = false;
+                                    } catch (Exception e) {
+                                        System.out.println(e.getMessage());
+                                    }
                                 }
                                 break;
                             }
                             case 18:
                             {
-                                try {
-                                    librarianService.deletePartners();
-                                } catch (PartnerNotFoundException | BookCurrentlyLentException | SQLException e) {
-                                    e.printStackTrace();
-                                    System.exit(1);
+                                running = true;
+                                while(running) {
+                                    try {
+                                        librarianService.deletePartners();
+                                        running = false;
+                                    } catch (Exception e) {
+                                        System.out.println(e.getMessage());
+                                    }
                                 }
                                 break;
                             }
                             case 19:
                             {
-                                try {
-                                    librarianService.deleteUsers();
-                                } catch (UserNotFoundException | BookCurrentlyLentException | SQLException e) {
-                                    e.printStackTrace();
-                                    System.exit(1);
+                                running = true;
+                                while(running) {
+                                    try {
+                                        librarianService.deleteUsers();
+                                        running = false;
+                                    } catch (Exception e) {
+                                        System.out.println(e.getMessage());
+                                    }
                                 }
                                 break;
                             }
@@ -351,13 +402,15 @@ public class Main{
                         choose = 3;
                     }
                     else {
-                        try {
-                            partnerService.loginInformation();
-                        } catch (EmailNotFoundException | IncorrectPasswordException | IncorrectPassFormatException | SQLException e) {
-                            e.printStackTrace();
-                            System.exit(1);
+                        boolean running = true;
+                        while(running) {
+                            try {
+                                partnerService.loginInformation();
+                                running = false;
+                            } catch (Exception e) {
+                                System.out.println(e.getMessage());
+                            }
                         }
-
                     }
                     while (choose != 3) {
                         System.out.print("\n");
@@ -367,21 +420,27 @@ public class Main{
                         switch (choose) {
                             case 1:
                             {
-                                try {
-                                    partnerService.addNewBook();
-                                } catch (SectionNotFoundException | SQLException | BookAlreadyAddedException e) {
-                                    e.printStackTrace();
-                                    System.exit(1);
+                                boolean running = true;
+                                while(running) {
+                                    try {
+                                        partnerService.addNewBook();
+                                        running = false;
+                                    } catch (Exception e) {
+                                        System.out.println(e.getMessage());
+                                    }
                                 }
                                 break;
                             }
                             case 2:
                             {
-                                try {
-                                    partnerService.printPartnerBooks();
-                                } catch (SQLException e) {
-                                    e.printStackTrace();
-                                    System.exit(1);
+                                boolean running = true;
+                                while(running) {
+                                    try {
+                                        partnerService.printPartnerBooks();
+                                        running = false;
+                                    } catch (Exception e) {
+                                        System.out.println(e.getMessage());
+                                    }
                                 }
                                 break;
                             }
@@ -406,11 +465,14 @@ public class Main{
                         choose = 5;
                     }
                     else {
-                        try {
-                            userService.loginInformation();
-                        } catch (EmailNotFoundException | IncorrectPasswordException | IncorrectPassFormatException | SQLException e) {
-                            e.printStackTrace();
-                            System.exit(1);
+                        boolean running = true;
+                        while(running) {
+                            try {
+                                userService.loginInformation();
+                                running = false;
+                            } catch (Exception e) {
+                                System.out.println(e.getMessage());
+                            }
                         }
                     }
                     while (choose != 5) {
@@ -421,41 +483,53 @@ public class Main{
                         switch (choose) {
                             case 1:
                             {
-                                try {
-                                    userService.printAvailableBooks();
-                                } catch (SQLException e) {
-                                    e.printStackTrace();
-                                    System.exit(1);
+                                boolean running = true;
+                                while(running) {
+                                    try {
+                                        userService.printAvailableBooks();
+                                        running = false;
+                                    } catch (Exception e) {
+                                        System.out.println(e.getMessage());
+                                    }
                                 }
                                 break;
                             }
                             case 2:
                             {
-                                try {
-                                    userService.printLentBooks();
-                                } catch (SQLException e) {
-                                    e.printStackTrace();
-                                    System.exit(1);
+                                boolean running = true;
+                                while(running) {
+                                    try {
+                                        userService.printLentBooks();
+                                        running = false;
+                                    } catch (Exception e) {
+                                        System.out.println(e.getMessage());
+                                    }
                                 }
                                 break;
                             }
                             case 3:
                             {
-                                try {
-                                    userService.printReturnedBooks();
-                                } catch (SQLException e) {
-                                    e.printStackTrace();
-                                    System.exit(1);
+                                boolean running = true;
+                                while(running) {
+                                    try {
+                                        userService.printReturnedBooks();
+                                        running = false;
+                                    } catch (Exception e) {
+                                        System.out.println(e.getMessage());
+                                    }
                                 }
                                 break;
                             }
                             case 4:
                             {
-                                try {
-                                    userService.printDiscounts();
-                                } catch (SQLException e) {
-                                    e.printStackTrace();
-                                    System.exit(1);
+                                boolean running = true;
+                                while(running) {
+                                    try {
+                                        userService.printDiscounts();
+                                        running = false;
+                                    } catch (Exception e) {
+                                        System.out.println(e.getMessage());
+                                    }
                                 }
                                 break;
                             }

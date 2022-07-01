@@ -106,12 +106,14 @@ public class Main{
                 case 1:
                 {
                     LibrarianService librarianService = new LibrarianService();
-                    try {
-                        librarianService.loginInformation();
-                    } catch (UsernameNotFoundException | IncorrectPasswordException ex) {
-                        csvAuditService.closeFile();
-                        ex.printStackTrace();
-                        System.exit(1);
+                    boolean running = true;
+                    while(running) {
+                        try {
+                            librarianService.loginInformation();
+                            running = false;
+                        } catch (Exception e) {
+                            System.out.println(e.getMessage());
+                        }
                     }
                     csvAuditService.updateCSV();
                     while (choose != 20){
@@ -122,60 +124,70 @@ public class Main{
                         switch (choose) {
                             case 1:
                             {
-                                try {
-                                    librarianService.addNewSection();
-                                } catch (AlreadyUsedNameException ex) {
-                                    csvAuditService.closeFile();
-                                    ex.printStackTrace();
-                                    System.exit(1);
+                                running = true;
+                                while(running) {
+                                    try {
+                                        librarianService.addNewSection();
+                                        running = false;
+                                    } catch (Exception e) {
+                                        System.out.println(e.getMessage());
+                                    }
                                 }
                                 csvAuditService.updateCSV();
                                 break;
                             }
                             case 2:
                             {
-                                try {
-                                    librarianService.addNewPartner();
-                                } catch (AlreadyUsedEmailException | IncorrectMailFormatException ex) {
-                                    csvAuditService.closeFile();
-                                    ex.printStackTrace();
-                                    System.exit(1);
+                                running = true;
+                                while(running) {
+                                    try {
+                                        librarianService.addNewPartner();
+                                        running = false;
+                                    } catch (Exception e) {
+                                        System.out.println(e.getMessage());
+                                    }
                                 }
                                 csvAuditService.updateCSV();
                                 break;
                             }
                             case 3:
                             {
-                                try {
-                                    librarianService.addNewUser();
-                                } catch (AlreadyUsedEmailException | IncorrectMailFormatException ex) {
-                                    csvAuditService.closeFile();
-                                    ex.printStackTrace();
-                                    System.exit(1);
+                                running = true;
+                                while(running) {
+                                    try {
+                                        librarianService.addNewUser();
+                                        running = false;
+                                    } catch (Exception e) {
+                                        System.out.println(e.getMessage());
+                                    }
                                 }
                                 csvAuditService.updateCSV();
                                 break;
                             }
                             case 4:
                             {
-                                try {
-                                    librarianService.lendNewBook();
-                                } catch (BookNotFoundException | BookAlreadyLentException | UserNotFoundException | IncorrectDateFormatException | MaxNumOfDaysException | WrongInputException | InvalidCodeException | DateNotValidException ex) {
-                                    csvAuditService.closeFile();
-                                    ex.printStackTrace();
-                                    System.exit(1);
+                                running = true;
+                                while(running) {
+                                    try {
+                                        librarianService.lendNewBook();
+                                        running = false;
+                                    } catch (Exception e) {
+                                        System.out.println(e.getMessage());
+                                    }
                                 }
                                 csvAuditService.updateCSV();
                                 break;
                             }
                             case 5:
                             {
-                                try {
-                                    librarianService.returnBook();
-                                } catch (UserNotFoundException | BookNotFoundException | IncorrectDateFormatException | BookNotLentException | NoLentBooksException | WrongInputException | DateNotValidException ex) {
-                                    csvAuditService.closeFile();
-                                    ex.printStackTrace();
-                                    System.exit(1);
+                                running = true;
+                                while(running) {
+                                    try {
+                                        librarianService.returnBook();
+                                        running = false;
+                                    } catch (Exception e) {
+                                        System.out.println(e.getMessage());
+                                    }
                                 }
                                 csvAuditService.updateCSV();
                                 break;
@@ -188,12 +200,14 @@ public class Main{
                             }
                             case 7:
                             {
-                                try {
-                                    librarianService.printSectionBooks();
-                                } catch (SectionNotFoundException ex) {
-                                    csvAuditService.closeFile();
-                                    ex.printStackTrace();
-                                    System.exit(1);
+                                running = true;
+                                while(running) {
+                                    try {
+                                        librarianService.printSectionBooks();
+                                        running = false;
+                                    } catch (Exception e) {
+                                        System.out.println(e.getMessage());
+                                    }
                                 }
                                 csvAuditService.updateCSV();
                                 break;
@@ -206,12 +220,14 @@ public class Main{
                             }
                             case 9:
                             {
-                                try {
-                                    librarianService.printPartnerBooks();
-                                } catch (PartnerNotFoundException ex) {
-                                    csvAuditService.closeFile();
-                                    ex.printStackTrace();
-                                    System.exit(1);
+                                running = true;
+                                while(running) {
+                                    try {
+                                        librarianService.printPartnerBooks();
+                                        running = false;
+                                    } catch (Exception e) {
+                                        System.out.println(e.getMessage());
+                                    }
                                 }
                                 csvAuditService.updateCSV();
                                 break;
@@ -224,24 +240,28 @@ public class Main{
                             }
                             case 11:
                             {
-                                try {
-                                    librarianService.printUserLentBooks();
-                                } catch (UserNotFoundException ex) {
-                                    csvAuditService.closeFile();
-                                    ex.printStackTrace();
-                                    System.exit(1);
+                                running = true;
+                                while(running) {
+                                    try {
+                                        librarianService.printUserLentBooks();
+                                        running = false;
+                                    } catch (Exception e) {
+                                        System.out.println(e.getMessage());
+                                    }
                                 }
                                 csvAuditService.updateCSV();
                                 break;
                             }
                             case 12:
                             {
-                                try {
-                                    librarianService.printUserReturnedBooks();
-                                } catch (UserNotFoundException ex) {
-                                    csvAuditService.closeFile();
-                                    ex.printStackTrace();
-                                    System.exit(1);
+                                running = true;
+                                while(running) {
+                                    try {
+                                        librarianService.printUserReturnedBooks();
+                                        running = false;
+                                    } catch (Exception e) {
+                                        System.out.println(e.getMessage());
+                                    }
                                 }
                                 csvAuditService.updateCSV();
                                 break;
@@ -260,60 +280,70 @@ public class Main{
                             }
                             case 15:
                             {
-                                try {
-                                    librarianService.printUserDiscounts();
-                                } catch (UserNotFoundException ex) {
-                                    csvAuditService.closeFile();
-                                    ex.printStackTrace();
-                                    System.exit(1);
+                                running = true;
+                                while(running) {
+                                    try {
+                                        librarianService.printUserDiscounts();
+                                        running = false;
+                                    } catch (Exception e) {
+                                        System.out.println(e.getMessage());
+                                    }
                                 }
                                 csvAuditService.updateCSV();
                                 break;
                             }
                             case 16:
                             {
-                                try {
-                                    librarianService.deleteBook();
-                                } catch (BookNotFoundException | BookCurrentlyLentException ex) {
-                                    csvAuditService.closeFile();
-                                    ex.printStackTrace();
-                                    System.exit(1);
+                                running = true;
+                                while(running) {
+                                    try {
+                                        librarianService.deleteBook();
+                                        running = false;
+                                    } catch (Exception e) {
+                                        System.out.println(e.getMessage());
+                                    }
                                 }
                                 csvAuditService.updateCSV();
                                 break;
                             }
                             case 17:
                             {
-                                try {
-                                    librarianService.deleteSections();
-                                } catch (SectionNotFoundException | BookCurrentlyLentException ex) {
-                                    csvAuditService.closeFile();
-                                    ex.printStackTrace();
-                                    System.exit(1);
+                                running = true;
+                                while(running) {
+                                    try {
+                                        librarianService.deleteSections();
+                                        running = false;
+                                    } catch (Exception e) {
+                                        System.out.println(e.getMessage());
+                                    }
                                 }
                                 csvAuditService.updateCSV();
                                 break;
                             }
                             case 18:
                             {
-                                try {
-                                    librarianService.deletePartners();
-                                } catch (PartnerNotFoundException | BookCurrentlyLentException ex) {
-                                    csvAuditService.closeFile();
-                                    ex.printStackTrace();
-                                    System.exit(1);
+                                running = true;
+                                while(running) {
+                                    try {
+                                        librarianService.deletePartners();
+                                        running = false;
+                                    } catch (Exception e) {
+                                        System.out.println(e.getMessage());
+                                    }
                                 }
                                 csvAuditService.updateCSV();
                                 break;
                             }
                             case 19:
                             {
-                                try {
-                                    librarianService.deleteUsers();
-                                } catch (UserNotFoundException | BookCurrentlyLentException ex) {
-                                    csvAuditService.closeFile();
-                                    ex.printStackTrace();
-                                    System.exit(1);
+                                running = true;
+                                while(running) {
+                                    try {
+                                        librarianService.deleteUsers();
+                                        running = false;
+                                    } catch (Exception e) {
+                                        System.out.println(e.getMessage());
+                                    }
                                 }
                                 csvAuditService.updateCSV();
                                 break;
@@ -338,12 +368,14 @@ public class Main{
                         choose = 3;
                     }
                     else {
-                        try {
-                            partnerService.loginInformation();
-                        } catch (EmailNotFoundException | IncorrectPasswordException | IncorrectPassFormatException ex) {
-                            csvAuditService.closeFile();
-                            ex.printStackTrace();
-                            System.exit(1);
+                        boolean running = true;
+                        while(running) {
+                            try {
+                                partnerService.loginInformation();
+                                running = false;
+                            } catch (Exception e) {
+                                System.out.println(e.getMessage());
+                            }
                         }
                         csvAuditService.updateCSV();
                     }
@@ -355,12 +387,14 @@ public class Main{
                         switch (choose) {
                             case 1:
                             {
-                                try {
-                                    partnerService.addNewBook();
-                                } catch (SectionNotFoundException | BookAlreadyAddedException ex) {
-                                    csvAuditService.closeFile();
-                                    ex.printStackTrace();
-                                    System.exit(1);
+                                boolean running = true;
+                                while(running) {
+                                    try {
+                                        partnerService.addNewBook();
+                                        running = false;
+                                    } catch (Exception e) {
+                                        System.out.println(e.getMessage());
+                                    }
                                 }
                                 csvAuditService.updateCSV();
                                 break;
@@ -392,12 +426,14 @@ public class Main{
                             choose = 5;
                     }
                     else {
-                        try {
-                            userService.loginInformation();
-                        } catch (EmailNotFoundException | IncorrectPasswordException | IncorrectPassFormatException ex) {
-                            csvAuditService.closeFile();
-                            ex.printStackTrace();
-                            System.exit(1);
+                        boolean running = true;
+                        while(running) {
+                            try {
+                                userService.loginInformation();
+                                running = false;
+                            } catch (Exception e) {
+                                System.out.println(e.getMessage());
+                            }
                         }
                         csvAuditService.updateCSV();
                     }

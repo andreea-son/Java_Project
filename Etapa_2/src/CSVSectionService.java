@@ -15,19 +15,22 @@ public class CSVSectionService {
     private static LibrarianService librarian = new LibrarianService();
     private static boolean[] isDeleted = new boolean[100];
 
-    private static CSVSectionService csvSectionService = new CSVSectionService();
-
     private CSVSectionService() {}
 
+    private static CSVSectionService single_instance = null;
+
     public static CSVSectionService getInstance() {
-        return csvSectionService;
+        if (single_instance == null)
+            single_instance = new CSVSectionService();
+
+        return single_instance;
     }
 
     public void readSections() {
         for (int i = 0; i < 100; i++)
             sectionField[i] = new String[20];
 
-        CSVPath = "../csv/sections.csv";
+        CSVPath = "Resources/csv/sections.csv";
         try {
             BufferedReader bufferedReader = new BufferedReader(new FileReader(CSVPath));
             while ((lineToRead = bufferedReader.readLine()) != null) {

@@ -16,19 +16,22 @@ public class CSVInvoiceService {
     private static Integer[] userId = new Integer[100];
     private static LibrarianService librarian = new LibrarianService();
 
-    private static CSVInvoiceService csvInvoiceService = new CSVInvoiceService();
-
     private CSVInvoiceService() {}
 
+    private static CSVInvoiceService single_instance = null;
+
     public static CSVInvoiceService getInstance() {
-        return csvInvoiceService;
+        if (single_instance == null)
+            single_instance = new CSVInvoiceService();
+
+        return single_instance;
     }
 
     protected void readInvoices() {
         for (int i = 0; i < 100; i++)
             invoiceField[i] = new String[20];
 
-        CSVPath = "../csv/invoices.csv";
+        CSVPath = "Resources/csv/invoices.csv";
 
         try {
             BufferedReader bufferedReader = new BufferedReader(new FileReader(CSVPath));

@@ -5,7 +5,6 @@ import java.sql.Statement;
 import java.util.Scanner;
 
 public class UserService {
-    private static LibrarianService librarianService = new LibrarianService();
     private static String userEmail;
     private static int userId;
     private static int i;
@@ -13,13 +12,14 @@ public class UserService {
     private String defaultPassword;
     private String userPassword1;
     private String userPassword2;
+    private GetConnection conn = GetConnection.getInstance();
 
     public UserService() {
 
     }
 
     public void loginInformation() throws EmailNotFoundException, IncorrectPasswordException, IncorrectPassFormatException, SQLException {
-        Connection connection = librarianService.getConnection();
+        Connection connection = conn.getConnection();
         int ok = 0;
 
         System.out.println("\nEmail: ");
@@ -80,7 +80,7 @@ public class UserService {
 
     public void printAvailableBooks() throws SQLException {
         int countBook;
-        Connection connection = librarianService.getConnection();
+        Connection connection = conn.getConnection();
         Statement statement1 = connection.createStatement();
         ResultSet result1 = statement1.executeQuery("SELECT COUNT(*) FROM BOOK WHERE UPPER(IS_LENT) = 'FALSE'");
 
@@ -126,7 +126,7 @@ public class UserService {
 
     public void printLentBooks() throws SQLException {
         int countLentBooks;
-        Connection connection = librarianService.getConnection();
+        Connection connection = conn.getConnection();
 
         Statement statement1 = connection.createStatement();
         ResultSet result1 = statement1.executeQuery("SELECT COUNT(*) FROM LENT_BOOK WHERE USER_ID = " + userId + " AND UPPER(IS_LENT) = 'TRUE'");
@@ -187,7 +187,7 @@ public class UserService {
 
     public void printReturnedBooks() throws SQLException{
         int countReturnedBooks;
-        Connection connection = librarianService.getConnection();
+        Connection connection = conn.getConnection();
 
         Statement statement1 = connection.createStatement();
         ResultSet result1 = statement1.executeQuery("SELECT COUNT(*) FROM LENT_BOOK WHERE USER_ID = " + userId + " AND UPPER(IS_LENT) = 'FALSE'");
@@ -276,7 +276,7 @@ public class UserService {
 
     public void printDiscounts() throws SQLException {
         int countDiscount = 0;
-        Connection connection = librarianService.getConnection();
+        Connection connection = conn.getConnection();
 
         Statement statement1 = connection.createStatement();
         ResultSet result1 = statement1.executeQuery("SELECT * FROM DISCOUNT WHERE USER_ID = " + userId + " AND UPPER(IS_USED) = 'FALSE'");

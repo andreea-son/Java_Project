@@ -1,0 +1,5 @@
+partnerId,numOfLogins,partnerName,partnerPassword,partnerEmail,isDeleted
+2,2,Jonathan Graham,Graham02#,john_graham@gmail.com,FALSE
+4,1,Susan Harris,Susan04#,SusanHarrys@gmail.com,FALSE
+1,0,Lily White,lily.white1,lily.white1@yahoo.com,FALSE
+3,1,Violet Riley,Violet03#,violetRiley33@yahoo.com,FALSE

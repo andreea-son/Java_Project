@@ -1,7 +1,0 @@
-bookId,isDeleted,author,title,description,issuedDate,daysFromIssue,isLent,sectionId,partnerId,userId
-2,FALSE,F. Scott Fitzgerald,The Great Gatsby,classic novel,2022-05-04,20,TRUE,1,2,3
-5,FALSE,George Orwell,1984,dystopian novel,2022-05-14,12,TRUE,4,3,4
-6,FALSE,Jane Austen, Pride and Prejudice ,classic novel,2022-05-20,10,TRUE,1,3,3
-8,FALSE,Harper Lee,To Kill a Mockingbird,classic novel,2022-05-23,11,TRUE,1,4,5
-10,FALSE,Stephen King,The Shining,horror,2022-05-07,22,TRUE,6,4,3
-9,FALSE,J. K. Rowling,Harry Potter and the Philosopher's Stone,fantasy,2022-05-12,14,TRUE,5,4,4

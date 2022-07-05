@@ -7,15 +7,14 @@
 
 ## About info
 * The topic of this Java application is a book lending system, that has the following features:
+  * logging in as a librarian/partner/user
   * lending books;
   * returning books;
-  * adding books/sections/users/partners;
-  * removing books/sections/users/partners;
-  * printing all the books/sections/users/partners in the system.
-* The main tables are:
-  * user - a type of user that only has access to viewing the information regarding their lent/returned books;
-  * partner - a type of user that only has access to adding new books and viewing the books they added;
-  * librarian - the user that has access to all the actions listed above, except for adding new books.
+  * adding, removing and viewing books/sections/users/partners.
+* The 3 types of users are:
+  * user - a type of user that only has access to viewing lent/returned books;
+  * partner - a type of user that only has access to adding, viewing added books;
+  * librarian - the user that has access to lending/returning books and adding, viewing, removing sections/users/partners.
 * The main rules of the application are:
   * a user is charged 2 ron/day for lending a book;
   * a user can keep a book for maximum 60 days;
@@ -70,10 +69,8 @@ Replace the services created in the second stage with others that use JDBC to st
 A service will be created that will expose create/read/update/delete operations for at least 4 of the defined classes.
 
 ## Technologies
-* SQL - used for writing the database model code;
-* Java - used for linking the database to the user interface;
-* Oracle SQL Developer - the IDE used for the SQL code;
-* IntelliJ IDEA - the IDE used for the Java code.
+* Programing languages: SQL, Java;
+* IDEs: Oracle SQL Developer, IntelliJ IDEA.
 
 ## Status
 Although all the project requirements were met, the user interface is not complete.

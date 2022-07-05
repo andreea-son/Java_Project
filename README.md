@@ -69,7 +69,7 @@ Replace the services created in the second stage with others that use JDBC to st
 A service will be created that will expose create/read/update/delete operations for at least 4 of the defined classes.
 
 ## Technologies
-* Programing languages: SQL, Java;
+* Programming languages: SQL, Java;
 * IDEs: Oracle SQL Developer, IntelliJ IDEA.
 
 ## Status

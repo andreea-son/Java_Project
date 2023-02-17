@@ -1,7 +1,7 @@
 # Java_Project
 ## Table of contents
 * [About info](#about-info)
-* [Requirements](#requirements-met)
+* [Requirements](#requirements)
 * [Technologies](#technologies)
 * [Status](#status)
 
